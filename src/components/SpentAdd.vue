@@ -1,10 +1,9 @@
 <script setup>
-import { ref, reactive, watch } from 'vue';
+import { ref, reactive } from 'vue';
 import { useSpentsStore } from '@/stores/spents.js';
 import { useCategoriesStore } from '@/stores/categories.js'
 import { inputValidation } from '@/utils/inputValidation.js'
 import Selector from '@/components/Selector.vue'
-import { postSpent } from '@/services/spents.services.js';
 
 const spents = useSpentsStore()
 const { getCategories } = useCategoriesStore()
@@ -12,7 +11,7 @@ const { getCategories } = useCategoriesStore()
 const { add } = spents
 const date = ref(new Date());
 
-const newSpent = reactive({
+let newSpent = reactive({
   date: date.value.toISOString().substring(0, 10),
   description: '',
   category: '',
@@ -21,9 +20,9 @@ const newSpent = reactive({
   spentValue: ''
 })
 
-const addSpent = () => {
+const addSpent = async () => {
   if (!inputValidation(newSpent)) return
-  add(newSpent)
+  await add(newSpent)
 }
 
 let showForm = ref(true)
