@@ -11,13 +11,7 @@ const date = ref(new Date().toISOString().substring(0, 7));
 const { getSpents, getTotal } = storeToRefs(spents)
 const { changeMonth, httpRequest } = spents
 
-async function httpGetAll() {
-  try {
-    if (!await httpRequest()) return
-    await httpRequest()
-  } catch (error) { return }
-}
-httpGetAll()
+httpRequest()
 
 watch(date, () => {
   const { month, year } = date.value
