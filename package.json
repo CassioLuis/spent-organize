@@ -15,8 +15,11 @@
     "@fortawesome/vue-fontawesome": "^3.0.3",
     "@vuepic/vue-datepicker": "^5.1.0",
     "axios": "^1.4.0",
+    "build": "^0.1.4",
     "dotenv": "^16.0.3",
+    "npm": "^9.6.6",
     "pinia": "^2.0.36",
+    "run": "^1.4.0",
     "vue": "^3.3.2",
     "vue-router": "^4.2.0"
   },
