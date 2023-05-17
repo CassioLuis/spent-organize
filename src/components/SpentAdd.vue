@@ -1,31 +1,36 @@
 <script setup>
-import { ref, reactive } from 'vue';
-import { useSpentsStore } from '../stores/spents.js';
-import { inputValidation } from '../utils/inputValidation.js'
-import Datepicker from '@vuepic/vue-datepicker';
-import '@vuepic/vue-datepicker/dist/main.css';
-import Selector from '../components/Selector.vue'
+import { ref, reactive, watch } from 'vue';
+import { useSpentsStore } from '@/stores/spents.js';
+import { useCategoriesStore } from '@/stores/categories.js'
+import { inputValidation } from '@/utils/inputValidation.js'
+import Selector from '@/components/Selector.vue'
 
-const date = ref();
+const spents = useSpentsStore()
+const { getCategories } = useCategoriesStore()
+
+const { add } = spents
+const date = ref(new Date());
+
+watch(date, () => {
+  console.log(date.value);
+})
+
 const newSpent = reactive({
-  date: '',
+  date: date.value.toLocaleDateString('en-US'),
   description: '',
   category: '',
   quota: '',
   spentValue: ''
 })
-let showForm = ref(true)
-
-const showAddSpentForm = () => showForm.value = !showForm.value
-
-const spents = useSpentsStore()
 
 const addSpent = () => {
-  console.log(newSpent)
-  if (!inputValidation(newSpent)) return
-  spents.add(newSpent)
+  // if (!inputValidation(newSpent)) return
+  add(newSpent)
 }
 
+let showForm = ref(true)
+const generateQuota = () => Array.from({ length: 24 }, (_, i) => String(i + 1))
+const showAddSpentForm = () => showForm.value = !showForm.value
 </script>
 <template>
   <div class="w-full font-semibold relative">
@@ -33,19 +38,20 @@ const addSpent = () => {
       <div class="flex gap-2 text-gray-300 text-sm">
         <div class="flex flex-col grow basis-1">
           <label for="date">Data:</label>
-          <Datepicker id="date" v-model="newSpent.date" valueType="format" class="h-8 mb-2" />
+          <Datepicker id="date" v-model="date" auto-apply locale="pt-BR" :enable-time-picker="false" format="dd/MM/yyyy"
+            dark class="h-8 mb-2" />
           <label for="description">Descrição:</label>
           <input id="description" type="text" v-model="newSpent.description" v-focus class="input border">
         </div>
         <div class="flex flex-col grow basis-1">
           <div class="flex flex-col grow">
             <label for="categories">Categoria:</label>
-            <Selector :options="categories" v-model="newSpent.category" class="input" />
+            <Selector :options="getCategories" v-model="newSpent.category" class="input" />
           </div>
           <div class="flex grow gap-2">
             <div class="flex flex-col grow justify-between">
               <label for="spentValue">Parc:</label>
-              <Selector :options="generateQuota" v-model="newSpent.quota" :value="newSpent.quota" class="input"
+              <Selector :options="generateQuota()" v-model="newSpent.quota" :value="newSpent.quota" class="input"
                 @keyup.enter="addSpent" />
             </div>
             <div class="flex flex-col grow">
