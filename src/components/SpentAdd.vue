@@ -4,6 +4,7 @@ import { useSpentsStore } from '@/stores/spents.js';
 import { useCategoriesStore } from '@/stores/categories.js'
 import { inputValidation } from '@/utils/inputValidation.js'
 import Selector from '@/components/Selector.vue'
+import { postSpent } from '@/services/spents.services.js';
 
 const spents = useSpentsStore()
 const { getCategories } = useCategoriesStore()
@@ -11,20 +12,17 @@ const { getCategories } = useCategoriesStore()
 const { add } = spents
 const date = ref(new Date());
 
-watch(date, () => {
-  console.log(date.value);
-})
-
 const newSpent = reactive({
-  date: date.value.toLocaleDateString('en-US'),
+  date: date.value.toISOString().substring(0, 10),
   description: '',
   category: '',
+  creditCard: true,
   quota: '',
   spentValue: ''
 })
 
 const addSpent = () => {
-  // if (!inputValidation(newSpent)) return
+  if (!inputValidation(newSpent)) return
   add(newSpent)
 }
 

@@ -1,22 +1,29 @@
 <script setup>
-import { useSpentsStore } from '@/stores/spents.js'
-import { ref, watch } from 'vue';
-import { convertToCurrency } from '@/utils/convertToCurrency.js'
 import SpentAdd from '@/components/SpentAdd.vue'
 import Spent from '@/components/Spent.vue'
+import { ref, watch } from 'vue';
 import { storeToRefs } from 'pinia';
+import { convertToCurrency } from '@/utils/convertToCurrency.js'
+import { useSpentsStore } from '@/stores/spents.js'
 
 const spents = useSpentsStore()
 const date = ref(new Date().toISOString().substring(0, 7));
 const { getSpents, getTotal } = storeToRefs(spents)
-const { changeMonth } = spents
+const { changeMonth, httpRequest } = spents
+
+async function httpGetAll() {
+  try {
+    if (!await httpRequest()) return
+    await httpRequest()
+  } catch (error) { return }
+}
+httpGetAll()
 
 watch(date, () => {
   const { month, year } = date.value
-  const newDate = `${year}-${month.toString().length === 1 ? '0'+(month + 1) : month}`
+  const newDate = `${year}-${month.toString().length === 1 ? '0' + (month + 1) : month}`
   changeMonth(newDate)
 })
-
 </script>
 
 <template>
@@ -52,108 +59,6 @@ watch(date, () => {
     </div>
   </div>
 </template>
-
-<!-- <script>
-import SpentAdd from '../components/SpentAdd.vue'
-import Spent from '../components/Spent.vue'
-import DatePicker from 'vue2-datepicker';
-import 'vue2-datepicker/index.css';
-import 'vue2-datepicker/locale/pt-br';
-import { mapGetters } from 'vuex'
-import { getAllSpents } from '../services/spents.services.js'
-
-export default {
-  components: { SpentAdd, Spent, /*DatePicker*/ },
-  name: 'spentlist',
-  layout: 'default',
-  data() {
-    return {
-      month: new Date().toISOString().substring(0, 7),
-      menuItens: [
-        {
-          name: 'Resumo',
-          route: '/spentlist/totalizer',
-        },
-        {
-          name: 'Grafico',
-          route: '/spentlist/grafico',
-        }
-      ]
-    }
-  },
-  async asyncData({ $axios }) {
-    const posts = await $axios.$get('spents')
-    console.log(posts);
-    return { posts }
-  },
-  mounted() {
-    this.findAllSpents()
-  },
-  methods: {
-    async findAllSpents() {
-      const response = await getAllSpents();
-      console.log(response.data.results);
-    },
-    convertToCurrency(value) {
-      return parseFloat(value).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    },
-    convertToNumber(value) {
-      return parseFloat(value)
-    },
-    isCategoryOfOthers(param) {
-      return this.getCategories.filter(item => item.otherPeople === param).map(item => item.name)
-    },
-    convertDateStringToUTCDate(param) {
-      return new Date(
-        Date.UTC(
-          Number(param.substring(0, 4)),
-          Number(param.substring(5, 7)) - 1,
-          Number(param.substring(8, 10)),
-          12, // hora do dia em UTC (meio-dia)
-          0, // minutos em UTC
-          0 // segundos em UTC
-        ))
-    },
-    previosMonth() {
-      const date = this.convertDateStringToUTCDate(this.month + '-01')
-      const getMonth = date.getMonth()
-      const previosMonth = date.setMonth(getMonth - 1)
-      const previosMonthToDate = new Date(previosMonth)
-      const previosMonthToString = previosMonthToDate.toISOString().substring(0, 7)
-      this.month = previosMonthToString
-    },
-    nextMonth() {
-      const date = this.convertDateStringToUTCDate(this.month + '-01')
-      const getMonth = date.getMonth()
-      const nextMonth = date.setMonth(getMonth + 1)
-      const nextMonthToDate = new Date(nextMonth)
-      const nextMonthToString = nextMonthToDate.toISOString().substring(0, 7)
-      this.month = nextMonthToString
-    }
-  },
-  computed: {
-    spents() {
-      return this.$store.state.spents.spentList.filter(spent => spent.date.substring(0, 7) === this.month)
-    },
-    sumTotal() {
-      return this.spents.filter(spent => spent.creditCard).reduce((acc, spent) => acc + this.convertToNumber(spent.spentValue), 0)
-    },
-    totalizerSpents() {
-      return Object.entries(
-        this.spents.reduce((acc, spent) => {
-          const category = spent.category;
-          const spentValue = Number(spent.spentValue);
-          acc[category] = (acc[category] || 0) + spentValue;
-          return acc;
-        }, {})
-      ).map(([category, spentValue]) => ({ category, spentValue }));
-    },
-    ...mapGetters({
-      getCategories: 'categories/getCategories'
-    })
-  }
-}
-</script> -->
 <style>
 .dp__pointer {
   width: 100% !important;
