@@ -1,7 +1,6 @@
 <script setup>
 import { reactive } from 'vue'
 import { convertToCurrency } from '@/utils/convertToCurrency.js'
-import { deleteSpent } from '@/services/spents.services.js'
 import { useSpentsStore } from '@/stores/spents.js'
 
 const props = defineProps({
@@ -59,12 +58,7 @@ const data = reactive({
 })
 
 const spents = useSpentsStore()
-const { removeSpentFromStore } = spents
-
-function removeSpent(item) {
-  const id = item._id
-  removeSpentFromStore(id)
-}
+const { removeSpent } = spents
 
 </script>
 <template>
@@ -95,7 +89,7 @@ function removeSpent(item) {
           <td class="text-right">{{ convertToCurrency(item.spentValue) }} </td>
           <td class="text-center">
             <font-awesome-icon class="cursor-pointer text-red-400" :icon="['fas', 'trash-can']"
-              @click="removeSpent(item)" />
+              @click="removeSpent(item._id)" />
           </td>
         </tr>
       </tbody>

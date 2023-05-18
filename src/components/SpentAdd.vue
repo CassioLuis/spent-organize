@@ -1,17 +1,29 @@
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive, computed } from 'vue';
 import { useSpentsStore } from '@/stores/spents.js';
 import { useCategoriesStore } from '@/stores/categories.js'
 import { inputValidation } from '@/utils/inputValidation.js'
 import Selector from '@/components/Selector.vue'
+import { storeToRefs } from 'pinia';
 
 const spents = useSpentsStore()
-const { getCategories } = useCategoriesStore()
+const categories = useCategoriesStore()
 
 const { add } = spents
+const { getCategories } = storeToRefs(categories)
 const date = ref(new Date());
 
-let newSpent = reactive({
+const data = reactive({
+  showForm: true,
+  generateQuota: function () {
+    return Array.from({ length: 24 }, (_, i) => String(i + 1))
+  },
+  quotas: computed(() => {
+    return data.generateQuota()
+  })
+})
+
+const newSpent = reactive({
   date: date.value.toISOString().substring(0, 10),
   description: '',
   category: '',
@@ -20,25 +32,30 @@ let newSpent = reactive({
   spentValue: ''
 })
 
+const showAddSpentForm = () => data.showForm = !data.showForm
+
+const cleanInputs = () => {
+  newSpent.description = ''
+  newSpent.quota = ''
+  newSpent.spentValue = ''
+}
+
 const addSpent = async () => {
   if (!inputValidation(newSpent)) return
   await add(newSpent)
+  cleanInputs()
 }
-
-let showForm = ref(true)
-const generateQuota = () => Array.from({ length: 24 }, (_, i) => String(i + 1))
-const showAddSpentForm = () => showForm.value = !showForm.value
 </script>
 <template>
   <div class="w-full font-semibold relative">
-    <div class="flex flex-col gap-2 border-t border-gray-700 pt-4" v-if="showForm" key="addSpentGroup">
+    <div class="flex flex-col gap-2 border-t border-gray-700 pt-4" v-if="data.showForm">
       <div class="flex gap-2 text-gray-300 text-sm">
         <div class="flex flex-col grow basis-1">
           <label for="date">Data:</label>
-          <Datepicker id="date" v-model="date" auto-apply locale="pt-BR" :enable-time-picker="false" format="dd/MM/yyyy"
-            dark class="h-8 mb-2" />
+          <Datepicker id="date" v-model="newSpent.date" auto-apply locale="pt-BR" :enable-time-picker="false"
+            format="dd/MM/yyyy" dark class="h-8 mb-2" />
           <label for="description">Descrição:</label>
-          <input id="description" type="text" v-model="newSpent.description" v-focus class="input border">
+          <input id="description" type="text" v-model="newSpent.description" v-focus class="input">
         </div>
         <div class="flex flex-col grow basis-1">
           <div class="flex flex-col grow">
@@ -48,7 +65,7 @@ const showAddSpentForm = () => showForm.value = !showForm.value
           <div class="flex grow gap-2">
             <div class="flex flex-col grow justify-between">
               <label for="spentValue">Parc:</label>
-              <Selector :options="generateQuota()" v-model="newSpent.quota" :value="newSpent.quota" class="input"
+              <Selector :options="data.quotas" v-model="newSpent.quota" :value="newSpent.quota" class="input"
                 @keyup.enter="addSpent" />
             </div>
             <div class="flex flex-col grow">
@@ -63,7 +80,7 @@ const showAddSpentForm = () => showForm.value = !showForm.value
         <button @click="addSpent" class="btn">Salvar</button>
       </div>
     </div>
-    <button @click="showAddSpentForm" v-if="!showForm" key="addSpentButton"
+    <button @click="showAddSpentForm" v-if="!data.showForm"
       class="p-1 text-center align-middle text-4xl cursor-pointer hover:text-white hover:rounded-sm hover:bg-green-300 transition-all w-full rounded bg-green-400">
       +
       <!-- <font-awesome-icon :icon="['fas', 'plus']" /> -->

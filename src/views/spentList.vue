@@ -6,12 +6,13 @@ import { storeToRefs } from 'pinia';
 import { convertToCurrency } from '@/utils/convertToCurrency.js'
 import { useSpentsStore } from '@/stores/spents.js'
 
-const spents = useSpentsStore()
 const date = ref(new Date().toISOString().substring(0, 7));
-const { getSpents, getTotal } = storeToRefs(spents)
-const { changeMonth, httpRequest } = spents
 
-httpRequest()
+const spents = useSpentsStore()
+const { getSpents, getTotal } = storeToRefs(spents)
+const { changeMonth, httpRequestSpents } = spents
+
+httpRequestSpents()
 
 watch(date, () => {
   const { month, year } = date.value

@@ -1,122 +1,10 @@
 import { defineStore } from 'pinia'
+import { postCategory, getAllCategories, deleteCategory } from '@/services/category.service'
 
 export const useCategoriesStore = defineStore('categories', {
   state: () => {
     return {
-      categories: [
-        {
-          name: "Lanche",
-          otherPeople: false
-        },
-        {
-          name: "Lazer",
-          otherPeople: false
-        },
-        {
-          name: "Transporte",
-          otherPeople: false
-        },
-        {
-          name: "Vestuario",
-          otherPeople: false
-        },
-        {
-          name: "Farmacia",
-          otherPeople: false
-        },
-        {
-          name: "Mercado",
-          otherPeople: false
-        },
-        {
-          name: "Viagem",
-          otherPeople: false
-        },
-        {
-          name: "Robby",
-          otherPeople: false
-        },
-        {
-          name: "Cursos",
-          otherPeople: false
-        },
-        {
-          name: "Casa",
-          otherPeople: false
-        },
-        {
-          name: "Uso Pessoal",
-          otherPeople: false
-        },
-        {
-          name: "Carro",
-          otherPeople: false
-        },
-        {
-          name: "Trabalho",
-          otherPeople: false
-        },
-        {
-          name: "Pet",
-          otherPeople: false
-        },
-        {
-          name: "Outras",
-          otherPeople: false
-        },
-        {
-          name: "Medico",
-          otherPeople: false
-        },
-        {
-          name: "Presente",
-          otherPeople: false
-        },
-        {
-          name: "Comp .de Terceiros",
-          otherPeople: false
-        },
-        {
-          name: "Energia",
-          otherPeople: false
-        },
-        {
-          name: "Internet",
-          otherPeople: false
-        },
-        {
-          name: "Pai",
-          otherPeople: true
-        },
-        {
-          name: "Água e Esgoto",
-          otherPeople: false
-        },
-        {
-          name: "Mercado Dividir",
-          otherPeople: false
-        },
-        {
-          name: "Farmacia Meu",
-          otherPeople: false
-        },
-        {
-          name: "Farmacia Pai",
-          otherPeople: true
-        },
-        {
-          name: "Streaming",
-          otherPeople: false
-        },
-        {
-          name: "Alimentação",
-          otherPeople: false,
-        },
-        {
-          name: "Casa Dividir",
-          otherPeople: false
-        }
-      ]
+      categories: []
     }
   },
   getters: {
@@ -125,8 +13,19 @@ export const useCategoriesStore = defineStore('categories', {
     }
   },
   actions: {
-    add(category) {
-      this.categories.push(category)
+    async httpRequestCategories() {
+      const response = await getAllCategories()
+      return this.categories = response.data
+    },
+    async addCategory(payload) {
+      await postCategory(payload)
+      await this.httpRequestCategories()
+    },
+    async removeCategory(categoryId) {
+      if (!confirm('Tem certeza que deseja excluir este item ?')) return
+      const index = this.categories.indexOf(this.categories.find(item => item._id === categoryId));
+      this.categories.splice(index, 1)
+      await deleteCategory(categoryId)
     }
   }
 })

@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia'
-import { convertDateToStringDate } from '@/utils/convertDateToStringDate.js'
-import { createNextSpentsForQuotas } from '@/utils/createNextSpentsForQuotas.js'
-import { getAllSpents } from '@/services/spents.services.js'
-import { deleteSpent, postSpent } from '@/services/spents.services.js'
+import { getAllSpents } from '@/services/spents.service.js'
+import { deleteSpent, postSpent } from '@/services/spents.service.js'
+import { useCategoriesStore } from '@/stores/categories.js'
+
+
 
 export const useSpentsStore = defineStore('spents', {
   state: () => {
@@ -35,18 +36,21 @@ export const useSpentsStore = defineStore('spents', {
     }
   },
   actions: {
-    async httpRequest() {
+    async httpRequestSpents() {
+      const categories = useCategoriesStore()
+      const { httpRequestCategories } = categories
+      await httpRequestCategories()
       const response = await getAllSpents()
       return this.spentList = response.data
     },
     async add(payload) {
       await postSpent(payload)
-      await this.httpRequest()
+      await this.httpRequestSpents()
     },
     changeMonth(newMonth) {
       this.month = newMonth
     },
-    async removeSpentFromStore(spentId) {
+    async removeSpent(spentId) {
       if (!confirm('Tem certeza que deseja excluir este item ?')) return
       const index = this.spentList.indexOf(this.spentList.find(item => item._id === spentId));
       this.spentList.splice(index, 1)
