@@ -48,7 +48,7 @@ body {
   @apply px-4 h-8
     cursor-pointer
     flex items-center
-    border rounded hover:rounded-sm
+    border rounded-sm
     border-gray-600
     bg-gray-700 hover:bg-gray-600 hover:text-gray-100
     transition-all

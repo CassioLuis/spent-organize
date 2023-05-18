@@ -14,7 +14,7 @@ const { getCategories } = storeToRefs(categories)
 const date = ref(new Date());
 
 const data = reactive({
-  showForm: true,
+  showForm: false,
   generateQuota: function () {
     return Array.from({ length: 24 }, (_, i) => String(i + 1))
   },
