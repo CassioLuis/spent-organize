@@ -26,10 +26,7 @@ export const useSummaryStore = defineStore('summary', {
         if (item.category === totalize.category) return
         item.expanded = false
       })
-      this.summaryList[index] = true
-      console.log(newSummary, this.summaryList[index]);
-      // totalize.expanded = !totalize.expanded
-      // console.log(totalize);
+      return this.summaryList[index].expanded = true
     }
   }
 })
