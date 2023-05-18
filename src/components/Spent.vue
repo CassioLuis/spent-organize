@@ -82,7 +82,7 @@ const { removeSpent } = spents
           <td class="text-left text-xs text-gray-400">{{ item.presentationDate }}</td>
           <td>{{ item.description }}</td>
           <td>
-            <span class="p-1 flex items-center justify-center rounded bg-red-400 text-xs font-semibold text-gray-200">{{
+            <span class="p-1 flex items-center justify-center rounded border border-gray-600 bg-gray-700 text-xs font-semibold text-gray-200">{{
               item.category }}</span>
           </td>
           <td class="text-center">{{ item.presentationQuota }} </td>

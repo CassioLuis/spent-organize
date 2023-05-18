@@ -22,9 +22,14 @@ const data = reactive({
     return data.generateQuota()
   })
 })
+const dateStringFormat = {
+  year: 'numeric',
+  month: 'numeric',
+  day: 'numeric'
+}
 
 const newSpent = reactive({
-  date: date.value.toISOString().substring(0, 10),
+  date: new Date().toLocaleDateString('pt-BR', dateStringFormat),
   description: '',
   category: '',
   creditCard: true,
@@ -32,7 +37,7 @@ const newSpent = reactive({
   spentValue: ''
 })
 
-const showAddSpentForm = () => data.showForm = !data.showForm
+console.log(newSpent.date);
 
 const cleanInputs = () => {
   newSpent.description = ''
@@ -76,14 +81,13 @@ const addSpent = async () => {
         </div>
       </div>
       <div class="w-full flex justify-end gap-1 items-baseline">
-        <button @click="showAddSpentForm" class="btn">Cancelar</button>
+        <button @click="() => data.showForm = !data.showForm" class="btn">Cancelar</button>
         <button @click="addSpent" class="btn">Salvar</button>
       </div>
     </div>
-    <button @click="showAddSpentForm" v-if="!data.showForm"
-      class="p-1 text-center align-middle text-4xl cursor-pointer hover:text-white hover:rounded-sm hover:bg-green-300 transition-all w-full rounded bg-green-400">
-      +
-      <!-- <font-awesome-icon :icon="['fas', 'plus']" /> -->
+    <button @click="() => data.showForm = !data.showForm" v-if="!data.showForm"
+      class="p-1 text-center align-middle text-4xl cursor-pointer hover:text-white hover:rounded-sm border border-gray-600 bg-gray-700 hover:bg-gray-600 transition-all w-full rounded ">
+      <font-awesome-icon :icon="['fas', 'plus']"/>
     </button>
   </div>
 </template>
