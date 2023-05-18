@@ -1,8 +1,12 @@
 <script setup>
 import { useCategoriesStore } from '@/stores/categories.js'
-import Selector from '@/components/Selector.vue';
+import Selector from '@/components/Selector.vue'
 import { reactive } from 'vue'
-import { storeToRefs } from 'pinia';
+import { storeToRefs } from 'pinia'
+
+const categories = useCategoriesStore()
+const { getCategories } = storeToRefs(categories)
+const { addCategory, httpRequestCategories, removeCategory, updateSubCategorie } = categories
 
 const data = reactive({
   category: {
@@ -12,15 +16,21 @@ const data = reactive({
   subCategories: ['Essencial', 'Dispensaveis', 'Outros', 'Eventuais']
 })
 
-const categories = useCategoriesStore()
-const { getCategories } = storeToRefs(categories)
-const { addCategory, httpRequestCategories, removeCategory } = categories
+
+const update = (id, name) => {
+  const body = {
+    id,
+    name,
+    subCategory: data.category.subCategory
+  }
+  updateSubCategorie(body)
+}
 
 httpRequestCategories()
 
 </script>
 <template>
-  <div class="p-4 border rounded w-[100%] h-auto">
+  <div class="p-4 border rounded-sm border-gray-500 w-[100%] h-auto">
     <div class="flex gap-4">
       <input @keyup.enter="addCategory(data.category)" v-model="data.category.name"
         placeholder="Digite uma categoria e pressione enter!" class="w-full p-2 text-black rounded">
@@ -38,7 +48,8 @@ httpRequestCategories()
           <tr v-for="item in getCategories" class="flex py-1 font-semibold border-b border-gray-600">
             <td class="grow basis-1 flex items-center">{{ item.name }}</td>
             <td class="grow basis-1 flex items-center justify-center">
-              <Selector helperMsg="Por favor, escolha uma opção..." :required="true" :options="data.subCategories"
+              <Selector @change="update(item._id, item.name)" :value="item.subCategory" v-model="data.category.subCategory" :required="true"
+                :options="data.subCategories"
                 class="h-8 px-2 bg-gray-800 text-white border rounded border-gray-600 cursor-pointer" />
             </td>
             <td class="grow basis-1 flex items-center justify-end">

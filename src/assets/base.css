@@ -9,6 +9,7 @@
   box-sizing: border-box;
   margin: 0;
   font-weight: normal;
+  overflow: hidden;
 }
 
 body {
@@ -45,9 +46,10 @@ body {
 }
 
 .btn {
-  @apply px-4 h-8
+  @apply 
+    px-4 h-8
     cursor-pointer
-    flex items-center
+    flex items-center justify-center
     border rounded-sm
     border-gray-600
     bg-gray-700 hover:bg-gray-600 hover:text-gray-100

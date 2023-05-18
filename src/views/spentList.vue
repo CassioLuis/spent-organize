@@ -1,10 +1,13 @@
 <script setup>
 import SpentAdd from '@/components/SpentAdd.vue'
 import Spent from '@/components/Spent.vue'
+import SpentTotalizer from '@/components/SpentTotalizer.vue';
 import { ref, watch } from 'vue';
 import { storeToRefs } from 'pinia';
 import { convertToCurrency } from '@/utils/convertToCurrency.js'
 import { useSpentsStore } from '@/stores/spents.js'
+import { useSummaryStore } from '@/stores/summary.js'
+
 
 const date = ref(new Date().toISOString().substring(0, 7));
 
@@ -12,7 +15,12 @@ const spents = useSpentsStore()
 const { getSpents, getTotal } = storeToRefs(spents)
 const { changeMonth, httpRequestSpents } = spents
 
+const summary = useSummaryStore()
+const { getSummary } = storeToRefs(summary)
+const { addSummary } = summary
+
 httpRequestSpents()
+addSummary()
 
 watch(date, () => {
   const { month, year } = date.value
@@ -24,7 +32,7 @@ watch(date, () => {
 <template>
   <div class="flex w-full h-screen gap-3 mb-4">
     <div class="flex flex-col h-full grow basis-1 gap-3">
-      <div class="flex border rounded border-gray-500 p-1 items-center">
+      <div class="flex border rounded-sm border-gray-600 p-1 items-center">
         <font-awesome-icon :icon="['fas', 'chevron-right']" @click="previosMonth"
           class="rotate-180 cursor-pointer w-2 hover:text-gray-100 transition-all px-2 py-4 h-full rounded-r" />
         <Datepicker v-model="date" month-picker auto-apply locale="pt-BR" dark
@@ -35,7 +43,7 @@ watch(date, () => {
           convertToCurrency(getTotal) }}</div>
       </div>
 
-      <div class="flex flex-col h-full gap-2 p-4 border rounded border-gray-500">
+      <div class="flex flex-col h-full gap-2 p-4 border rounded-sm border-gray-600">
         <div class="flex flex-col grow basis-1 overflow-y-auto">
           <Spent :spent-list="getSpents" />
         </div>
@@ -44,13 +52,10 @@ watch(date, () => {
         </div>
       </div>
     </div>
-    <div class="flex flex-col justify-between border-gray-500 grow basis-1 border rounded p-4 font-semibold">
-      <div class="pb-2 flex gap-1">
-        <NuxtLink v-for="{ name, route, id } in menuItens" :key="id" :to="route" class="btn">
-          {{ name }}
-        </NuxtLink>
+    <div class="flex flex-col justify-between border-gray-600 grow basis-1 border rounded-sm p-4 font-semibold">
+      <div class="grow pb-2 flex gap-1">
+        <SpentTotalizer :totalizer-spents="getSummary" class="w-full" />
       </div>
-      <NuxtChild :month="month" class="grow" />
     </div>
   </div>
 </template>

@@ -24,6 +24,17 @@ export async function postCategory(body) {
   }
 }
 
+export async function updateCategory(body) {
+  try {
+    const req = await axios.patch(`${baseURL}/category/${body.id}`, body)
+    return req
+  }
+  catch (error) {
+    const { message } = error.response.data
+    return alert(message)
+  }
+}
+
 export function deleteCategory(categoryId) {
   const req = axios.delete(`${baseURL}/category/${categoryId}`)
   return req

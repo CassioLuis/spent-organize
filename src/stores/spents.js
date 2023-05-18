@@ -4,7 +4,6 @@ import { deleteSpent, postSpent } from '@/services/spents.service.js'
 import { useCategoriesStore } from '@/stores/categories.js'
 
 
-
 export const useSpentsStore = defineStore('spents', {
   state: () => {
     return {
@@ -25,7 +24,6 @@ export const useSpentsStore = defineStore('spents', {
         const spentsByCategory = this.getSpents.filter(spent => spent.category === category);
         const totalSpentByCategory = spentsByCategory.reduce((acc, spent) => acc + Number(spent.spentValue), 0);
         return {
-          // id: uuidv4(),
           category: category,
           totalSpent: totalSpentByCategory,
           expanded: false,

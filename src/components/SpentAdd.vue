@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, computed } from 'vue';
+import { reactive, computed } from 'vue';
 import { useSpentsStore } from '@/stores/spents.js';
 import { useCategoriesStore } from '@/stores/categories.js'
 import { inputValidation } from '@/utils/inputValidation.js'
@@ -11,7 +11,6 @@ const categories = useCategoriesStore()
 
 const { add } = spents
 const { getCategories } = storeToRefs(categories)
-const date = ref(new Date());
 
 const data = reactive({
   showForm: false,
@@ -22,22 +21,15 @@ const data = reactive({
     return data.generateQuota()
   })
 })
-const dateStringFormat = {
-  year: 'numeric',
-  month: 'numeric',
-  day: 'numeric'
-}
 
 const newSpent = reactive({
-  date: new Date().toLocaleDateString('pt-BR', dateStringFormat),
+  date: new Date(),
   description: '',
   category: '',
   creditCard: true,
   quota: '',
   spentValue: ''
 })
-
-console.log(newSpent.date);
 
 const cleanInputs = () => {
   newSpent.description = ''
@@ -86,7 +78,7 @@ const addSpent = async () => {
       </div>
     </div>
     <button @click="() => data.showForm = !data.showForm" v-if="!data.showForm"
-      class="p-1 text-center align-middle text-4xl cursor-pointer hover:text-white hover:rounded-sm border border-gray-600 bg-gray-700 hover:bg-gray-600 transition-all w-full rounded ">
+      class="text-4xl w-full btn py-7">
       <font-awesome-icon :icon="['fas', 'plus']"/>
     </button>
   </div>

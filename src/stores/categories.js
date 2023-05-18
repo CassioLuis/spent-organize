@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { postCategory, getAllCategories, deleteCategory } from '@/services/category.service'
+import { postCategory, getAllCategories, deleteCategory, updateCategory } from '@/services/category.service'
 
 export const useCategoriesStore = defineStore('categories', {
   state: () => {
@@ -13,6 +13,13 @@ export const useCategoriesStore = defineStore('categories', {
     }
   },
   actions: {
+    async updateSubCategorie(body) {
+      console.log(body);
+      const updateItem = this.categories.find(item => item._id === body.id)
+      const indexOfUpdateItem = this.categories.indexOf(updateItem)
+      this.categories[indexOfUpdateItem].subCategory = body.subCategory
+      await updateCategory(body)
+    },
     async httpRequestCategories() {
       const response = await getAllCategories()
       return this.categories = response.data
