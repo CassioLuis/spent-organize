@@ -6,27 +6,21 @@ import { ref, watch } from 'vue';
 import { storeToRefs } from 'pinia';
 import { convertToCurrency } from '@/utils/convertToCurrency.js'
 import { useSpentsStore } from '@/stores/spents.js'
-import { useSummaryStore } from '@/stores/summary.js'
 
 
 const date = ref(new Date().toISOString().substring(0, 7));
 
 const spents = useSpentsStore()
-const { getSpents, getTotal } = storeToRefs(spents)
-const { changeMonth, httpRequestSpents } = spents
-
-const summary = useSummaryStore()
-const { getSummary } = storeToRefs(summary)
-const { addSummary } = summary
-
+const { getSpents, getTotal, getSummary } = storeToRefs(spents)
+const { changeMonth, httpRequestSpents, resetSummary } = spents
 httpRequestSpents()
-addSummary()
 
 watch(date, () => {
   const { month, year } = date.value
   const newDate = `${year}-${month.toString().length === 1 ? '0' + (month + 1) : month}`
   changeMonth(newDate)
 })
+
 </script>
 
 <template>

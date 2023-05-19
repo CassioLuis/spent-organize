@@ -13,7 +13,7 @@ const data = reactive({
     name: '',
     subCategory: ''
   },
-  subCategories: ['Essencial', 'Dispensaveis', 'Outros', 'Eventuais']
+  subCategories: ['Essencial', 'Dispensaveis', 'Outros', 'Eventuais', 'Dividir']
 })
 
 

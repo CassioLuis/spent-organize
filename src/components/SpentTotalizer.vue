@@ -1,20 +1,16 @@
 <script setup>
-import Accordion from '@/components/Accordion.vue';
+import Accordion from '@/components/Accordion.vue'
+import { watch } from 'vue'
 import { convertToCurrency } from '@/utils/convertToCurrency.js'
-import { useSummaryStore } from '@/stores/summary.js'
+import { useSpentsStore } from '@/stores/spents.js'
+import { storeToRefs } from 'pinia'
 
-const summary = useSummaryStore()
-const { expand } = summary
+const spent = useSpentsStore()
+const { getSpents, getSummary } = storeToRefs(spent)
+const { expand, resetSummary, sumDebits } = spent
 
-const props = defineProps({
-  // month: {
-  //   type: String,
-  //   required: true
-  // },
-  totalizerSpents: {
-    type: Array,
-    required: true
-  }
+watch(getSpents, () => {
+  resetSummary()
 })
 
 </script >
@@ -23,13 +19,13 @@ const props = defineProps({
     <div class="flex flex-col justify-between h-full">
       <p class="text-center border-b border-gray-700 text-lg">Resumo</p>
       <div class="grow pt-4 overflow-y-auto">
-        <Accordion v-for="totalizer in totalizerSpents" :key="totalizer.id" @click="expand(totalizer)">
+        <Accordion v-for="totalizer in getSummary" @click="expand(totalizer)">
           <template #accordion-tittle>
             <span>{{ totalizer.category }}</span>
             <span>{{ convertToCurrency(totalizer.totalSpent) }}</span>
           </template>
           <template #accordion-content>
-            <li v-if="totalizer.expanded" v-for="spent in totalizer.spents" :key="spent.id"
+            <li v-if="totalizer.expanded" v-for="spent in totalizer.spents" :key="spent._id"
               class="overflow-hidden flex justify-between gap-2 text-xs text-gray-400 border-gray-600">
               <div class="flex justify-between p-4 items-center w-full">
                 <span>{{ spent.description }}</span>
@@ -43,11 +39,11 @@ const props = defineProps({
         <p class="text-center border-b border-gray-700 mb-4">Totais</p>
         <div class="flex justify-between">
           <span>Meus Debitos (-)</span>
-          <!-- <span>{{ sumDebits(false) }}</span> -->
+          <span>{{ sumDebits() }}</span>
         </div>
         <div class="flex justify-between">
           <span>Debitos Outros (-)</span>
-          <!-- <span>{{ sumDebits(true) }}</span> -->
+          <span>{{ sumDebits('Outros') }}</span>
         </div>
       </div>
     </div>

@@ -77,9 +77,8 @@ const addSpent = async () => {
         <button @click="addSpent" class="btn">Salvar</button>
       </div>
     </div>
-    <button @click="() => data.showForm = !data.showForm" v-if="!data.showForm"
-      class="text-4xl w-full btn py-7">
-      <font-awesome-icon :icon="['fas', 'plus']"/>
+    <button @click="() => data.showForm = !data.showForm" v-if="!data.showForm" class="text-4xl w-full btn py-7">
+      <font-awesome-icon :icon="['fas', 'plus']" />
     </button>
   </div>
 </template>
