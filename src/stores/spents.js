@@ -106,7 +106,8 @@ export const useSpentsStore = defineStore('spents', {
 
       const resultado = summary.reduce((acumulador, item) => {
         const { category, totalSpent } = item
-        const subcategorias = getCategories.value.filter(subcat => subcat.category === category)
+        // console.log(category, totalSpent, getCategories.value);
+        const subcategorias = getCategories.value.filter(cat => cat.nome === category)
           .map(subcat => ({ subcategoria: subcat.subCategory, valor: totalSpent }))
         const objeto = { category, subcategorias, totalSpent }
 
