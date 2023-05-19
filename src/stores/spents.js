@@ -77,14 +77,55 @@ export const useSpentsStore = defineStore('spents', {
       this.summary[index].expanded = !this.summary[index].expanded
     },
     sumDebits(param) {
-      const debits = this.getSummary.reduce((acc, item) => {
-        if (item.category.toLowerCase().includes('dividir')) return acc + item.totalSpent / 2;
-        if (this.isCategoryOfOthers(param).includes(item.category)) return acc + item.totalSpent
-        if (!param && item.category.toLowerCase().includes('dividir')) return acc + item.totalSpent
-        if (!param) return acc + item.totalSpent
-        return acc
-      }, 0)
-      return convertToCurrency(debits)
+      const categories = useCategoriesStore()
+      const { getCategories } = storeToRefs(categories)
+      const summary = this.getSummary
+      const category = summary.map(spent => spent.category)
+      const subCategory = [...new Set(getCategories.value.map(spent => spent.subCategory))]
+
+      // const subCategoryByCategory = summary.map(category => {
+      //   const categories = getCategories.value.filter(item => item.name === category.category);
+      //   return {
+      //     category: category[0].category,
+      //     subCategory: categories.length ? categories[0].subCategory : null
+      //   };
+      // });
+
+      // const resultado = summary.reduce((acumulador, item) => {
+      //   const { category, totalSpent } = item
+      //   const subcategorias = getCategories.value.filter(subcat => subcat.category === category).map(subcat => subcat.subCategory)
+      //   const objeto = { category, subcategorias, totalSpent }
+
+      //   acumulador.valorTotal += totalSpent;
+      //   acumulador.listaCategorias.push(objeto);
+
+      //   return acumulador;
+      // }, { valorTotal: 0, listaCategorias: [] });
+
+      // console.log(resultado);
+
+      const resultado = summary.reduce((acumulador, item) => {
+        const { category, totalSpent } = item
+        const subcategorias = getCategories.value.filter(subcat => subcat.category === category)
+          .map(subcat => ({ subcategoria: subcat.subCategory, valor: totalSpent }))
+        const objeto = { category, subcategorias, totalSpent }
+
+        acumulador.valorTotal += totalSpent;
+        acumulador.listaCategorias.push(objeto);
+
+        return acumulador;
+      }, { valorTotal: 0, listaCategorias: [] });
+
+      console.log(resultado);
+
+
+      // const debits = this.getSummary.reduce((acc, item) => {
+      //   if (item.category.toLowerCase().includes('dividir')) return acc + item.totalSpent / 2;
+      //   if (this.isCategoryOfOthers(param).includes(item.category)) return acc + item.totalSpent
+      //   // if (!param) return acc + item.totalSpent
+      //   return acc
+      // }, 0)
+      // return convertToCurrency(debits)
     }
   }
 })
