@@ -14,7 +14,6 @@ export const useCategoriesStore = defineStore('categories', {
   },
   actions: {
     async updateSubCategorie(body) {
-      console.log(body);
       const updateItem = this.categories.find(item => item._id === body.id)
       const indexOfUpdateItem = this.categories.indexOf(updateItem)
       this.categories[indexOfUpdateItem].subCategory = body.subCategory

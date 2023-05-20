@@ -106,18 +106,29 @@ export const useSpentsStore = defineStore('spents', {
 
       const resultado = summary.reduce((acumulador, item) => {
         const { category, totalSpent } = item
-        // console.log(category, totalSpent, getCategories.value);
-        const subcategorias = getCategories.value.filter(cat => cat.name === category)
+        const subcategorias = getCategories.value
+          .filter(cat => cat.name === category)
           .map(subcat => ({ subcategoria: subcat.subCategory, valor: totalSpent }))
-        const objeto = { category, subcategorias, totalSpent }
 
+        const objeto = { subCat: subcategorias[0].subcategoria, totalSpent }
         acumulador.valorTotal += totalSpent;
         acumulador.listaCategorias.push(objeto);
 
         return acumulador;
       }, { valorTotal: 0, listaCategorias: [] });
 
-      console.log(resultado);
+      console.log({
+        ...resultado,
+        listaCategorias: resultado.listaCategorias.reduce((acc, item) => {
+          const foundItem = acc.find(obj => obj.subCat === item.subCat);
+          if (foundItem) {
+            foundItem.totalSpent += item.totalSpent;
+          } else {
+            acc.push({ subCat: item.subCat, totalSpent: item.totalSpent });
+          }
+          return acc;
+        }, [])
+      });
 
 
       // const debits = this.getSummary.reduce((acc, item) => {
