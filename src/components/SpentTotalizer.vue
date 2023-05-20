@@ -6,11 +6,13 @@ import { useSpentsStore } from '@/stores/spents.js'
 import { storeToRefs } from 'pinia'
 
 const spent = useSpentsStore()
-const { getSpents, getSummary } = storeToRefs(spent)
+const { getSpents, getSummary, getSummarySubTotals } = storeToRefs(spent)
 const { expand, resetSummary, sumDebits } = spent
 
 watch(getSpents, () => {
   resetSummary()
+  console.log(getSummary);
+  console.log(getSummarySubTotals);
 })
 
 </script >
@@ -19,7 +21,7 @@ watch(getSpents, () => {
     <div class="flex flex-col justify-between h-full">
       <p class="text-center border-b border-gray-700 text-lg">Resumo</p>
       <div class="grow pt-4 overflow-y-auto">
-        <Accordion v-for="totalizer in getSummary" @click="expand(totalizer)">
+        <Accordion v-for="totalizer in getSummary.summary" @click="expand(totalizer)">
           <template #accordion-tittle>
             <span>{{ totalizer.category }}</span>
             <span>{{ convertToCurrency(totalizer.totalSpent) }}</span>
@@ -39,11 +41,11 @@ watch(getSpents, () => {
         <p class="text-center border-b border-gray-700 mb-4">Totais</p>
         <div class="flex justify-between">
           <span>Meus Debitos (-)</span>
-          <span>{{ sumDebits() }}</span>
+          <span></span>
         </div>
         <div class="flex justify-between">
           <span>Debitos Outros (-)</span>
-          <span>{{ sumDebits('Outros') }}</span>
+          <span></span>
         </div>
       </div>
     </div>
