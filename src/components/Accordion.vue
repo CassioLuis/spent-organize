@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="flex flex-col p-1 border rounded-sm border-gray-600">
+    <div class="flex flex-col p-1 px-3 border rounded-sm border-gray-600">
       <div class="flex justify-between p-1 cursor-pointer">
         <slot name="accordion-tittle">Accordion-tittle</slot>
       </div>

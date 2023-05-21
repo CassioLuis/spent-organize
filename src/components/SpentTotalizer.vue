@@ -17,13 +17,15 @@ watch(getSpents, () => {
 <template>
   <div>
     <div class="flex flex-col justify-between h-full">
-      <p class="text-center border-b border-gray-700 text-lg">Resumo</p>
+      <p class="text-center border-b border-gray-700 text-lg font-semibold">Resumo</p>
       <div class="grow pt-4 overflow-y-auto flex flex-col gap-2">
-        <Accordion v-for="totalizer in getSummary.summary" @click="expand(totalizer)" :class="totalizer.style"
+        <Accordion v-for="totalizer in getSummary.summary" :class="totalizer.style"
           class="transition">
           <template #accordion-tittle>
-            <span>{{ totalizer.category }}</span>
-            <span>{{ convertToCurrency(totalizer.totalSpent) }}</span>
+            <div @click="expand(totalizer)" class="w-full flex justify-between">
+              <span>{{ totalizer.category }}</span>
+              <span>{{ convertToCurrency(totalizer.totalSpent) }}</span>
+            </div>
           </template>
           <template #accordion-content>
             <li v-if="totalizer.expanded" v-for="{ description, spentValue, _id } in totalizer.spents" :key="_id"
@@ -37,7 +39,7 @@ watch(getSpents, () => {
         </Accordion>
       </div>
       <div>
-        <p class="text-center border-b border-gray-700 mb-4">Totais</p>
+        <p class="text-center border-b border-gray-700 mb-4 text-lg font-semibold">Sub Totais</p>
         <Accordion>
           <template #accordion-tittle>
             <span>Total de Debitos</span>

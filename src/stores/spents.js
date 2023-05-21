@@ -93,7 +93,6 @@ export const useSpentsStore = defineStore('spents', {
       return this.summaryList.summary.forEach(item => item.style = '')
     },
     resetSummary() {
-      console.log(this.handleTotals);
       return this.summaryList = this.handleTotals
     },
     async httpRequestSpents() {
