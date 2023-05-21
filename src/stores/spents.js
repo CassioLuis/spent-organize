@@ -22,51 +22,50 @@ export const useSpentsStore = defineStore('spents', {
     getTotal() {
       return this.getSpents.filter(spent => spent.creditCard).reduce((acc, spent) => acc + Number(spent.spentValue), 0)
     },
-    getTotalizerSpentsByCategory() {
+    handleTotals() {
       const spents = this.getSpents
-      const categories = [...new Set(spents.map(spent => spent.category))];
-      const totalizer = categories.map(category => {
+      const spentCategories = [...new Set(spents.map(spent => spent.category))];
+      const totalizer = spentCategories.map(category => {
         const spentsByCategory = spents.filter(spent => spent.category === category);
         const totalSpentByCategory = spentsByCategory.reduce((acc, spent) => acc + Number(spent.spentValue), 0);
         return {
           category: category,
           totalSpent: totalSpentByCategory,
           expanded: false,
-          spents: spentsByCategory
-        };
-      });
-      return totalizer
-    },
-    getSummarySubTotals() {
+          spents: spentsByCategory,
+          style: ''
+        }
+      })
       const categories = useCategoriesStore()
       const { getCategories } = storeToRefs(categories)
-      const summary = this.summaryList.summary
-      console.log('summary:', summary.value);
-      
-      const resultado = summary.reduce((acumulador, item) => {
+
+      const resultado = totalizer.reduce((acumulador, item) => {
         const { category, totalSpent } = item
-        const subcategorias = getCategories.value
-          .filter(cat => cat.name === category)
+        const subcategories = getCategories.value.filter(cat => cat.name === category)
           .map(subcat => ({ subcategoria: subcat.subCategory, valor: totalSpent }))
 
-        const objeto = { subCat: subcategorias[0].subcategoria, totalSpent }
+        const subcategoriestotal = { category, subCat: subcategories[0].subcategoria, totalSpent }
         acumulador.valorTotal += totalSpent;
-        acumulador.listaCategorias.push(objeto);
+        acumulador.listaCategorias.push(subcategoriestotal);
 
         return acumulador;
       }, { valorTotal: 0, listaCategorias: [] });
 
       return {
-        ...resultado,
-        listaCategorias: resultado.listaCategorias.reduce((acc, item) => {
-          const foundItem = acc.find(obj => obj.subCat === item.subCat);
-          if (foundItem) {
-            foundItem.totalSpent += item.totalSpent;
-          } else {
-            acc.push({ subCat: item.subCat, totalSpent: item.totalSpent });
-          }
-          return acc;
-        }, [])
+        summary: [...totalizer],
+        summarySubTotals: {
+          ...resultado,
+          listaCategorias: resultado.listaCategorias.reduce((acc, item) => {
+            const foundItem = acc.find(obj => obj.subCat === item.subCat)
+            if (foundItem) {
+              foundItem.category.push(item.category)
+              foundItem.totalSpent += item.totalSpent;
+            } else {
+              acc.push({ subCat: item.subCat, totalSpent: item.totalSpent, category: [item.category] });
+            }
+            return acc;
+          }, [])
+        }
       }
     },
     getSummary() {
@@ -79,8 +78,23 @@ export const useSpentsStore = defineStore('spents', {
     }
   },
   actions: {
+    applyRightLight(categories) {
+      const summary = this.summaryList.summary
+      const category = summary.map(item => item.category)
+      const styles = 'bg-gray-700'
+      const categoryToStyle = category.map((item, index) => {
+        const test = categories.includes(item)
+        if (test) return summary[index].style = styles
+        return summary[index].style = ''
+      })
+      return categoryToStyle
+    },
+    removeRightLight() {
+      return this.summaryList.summary.forEach(item => item.style = '')
+    },
     resetSummary() {
-      return this.summaryList.summary = this.getTotalizerSpentsByCategory
+      console.log(this.handleTotals);
+      return this.summaryList = this.handleTotals
     },
     async httpRequestSpents() {
       const categories = useCategoriesStore()
