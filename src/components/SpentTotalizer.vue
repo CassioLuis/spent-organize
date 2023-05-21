@@ -18,7 +18,7 @@ watch(getSpents, () => {
   <div>
     <div class="flex flex-col justify-between h-full">
       <p class="text-center border-b border-gray-700 text-lg">Resumo</p>
-      <div class="grow pt-4 overflow-y-auto">
+      <div class="grow pt-4 overflow-y-auto flex flex-col gap-2">
         <Accordion v-for="totalizer in getSummary.summary" @click="expand(totalizer)" :class="totalizer.style"
           class="transition">
           <template #accordion-tittle>
