@@ -20,9 +20,7 @@ watch(date, () => {
   const newDate = `${year}-${month.toString().length === 1 ? '0' + (month + 1) : month}`
   changeMonth(newDate)
 })
-
 </script>
-
 <template>
   <div class="flex w-full h-screen gap-3 mb-4">
     <div class="flex flex-col h-full grow basis-1 gap-3">

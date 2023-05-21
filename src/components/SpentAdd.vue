@@ -7,9 +7,9 @@ import Selector from '@/components/Selector.vue'
 import { storeToRefs } from 'pinia';
 
 const spents = useSpentsStore()
-const categories = useCategoriesStore()
-
 const { add } = spents
+
+const categories = useCategoriesStore()
 const { getCategories } = storeToRefs(categories)
 
 const data = reactive({

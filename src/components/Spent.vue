@@ -3,6 +3,9 @@ import { reactive } from 'vue'
 import { convertToCurrency } from '@/utils/convertToCurrency.js'
 import { useSpentsStore } from '@/stores/spents.js'
 
+const spents = useSpentsStore()
+const { removeSpent } = spents
+
 const props = defineProps({
   spentList: {
     type: Array,
@@ -56,10 +59,6 @@ const data = reactive({
     },
   ]
 })
-
-const spents = useSpentsStore()
-const { removeSpent } = spents
-
 </script>
 <template>
   <div class="font-semibold text-sm">

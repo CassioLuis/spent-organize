@@ -7,6 +7,7 @@ import { storeToRefs } from 'pinia'
 const categories = useCategoriesStore()
 const { getCategories } = storeToRefs(categories)
 const { addCategory, httpRequestCategories, removeCategory, updateSubCategorie } = categories
+httpRequestCategories()
 
 const data = reactive({
   category: {
@@ -16,18 +17,14 @@ const data = reactive({
   subCategories: ['Essencial', 'Dispensaveis', 'Outros', 'Eventuais', 'Dividir']
 })
 
-
-const update = (id, name) => {
+const update = async (id, name) => {
   const body = {
     id,
     name,
     subCategory: data.category.subCategory
   }
-  updateSubCategorie(body)
+  await updateSubCategorie(body)
 }
-
-httpRequestCategories()
-
 </script>
 <template>
   <div class="p-4 border rounded-sm border-gray-500 w-[100%] h-auto">
