@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <div class="flex flex-col p-1 px-3 border rounded-sm border-gray-600">
-      <div class="flex justify-between p-1 cursor-pointer">
+  <div class="transition-all">
+    <div class="flex flex-col border rounded-sm border-gray-600">
+      <div class="flex justify-between cursor-pointer">
         <slot name="accordion-tittle">Accordion-tittle</slot>
       </div>
       <TransitionGroup tag="ul" @before-enter="onBeforeEnter" @enter="onEnter" @before-leave="onBeforeLeave"

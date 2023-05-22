@@ -2,12 +2,11 @@ import { defineStore, storeToRefs } from 'pinia'
 import { getAllSpents } from '@/services/spents.service.js'
 import { deleteSpent, postSpent } from '@/services/spents.service.js'
 import { useCategoriesStore } from '@/stores/categories.js'
-import { convertToCurrency } from '@/utils/convertToCurrency.js'
 
 export const useSpentsStore = defineStore('spents', {
   state: () => {
     return {
-      month: new Date().toISOString().substring(0, 7),
+      monthYear: {},
       summaryList: {
         summary: [],
         summarySubTotals: {}
@@ -16,8 +15,13 @@ export const useSpentsStore = defineStore('spents', {
     }
   },
   getters: {
+    getMonth() {
+      return this.monthYear
+    },
     getSpents() {
-      return this.spentList.filter(spent => spent.date.substring(0, 7) === this.month)
+      const { month, year } = this.monthYear
+      const newMonthYear = `${year}-${month.toString().length === 1 ? '0' + (month + 1) : month}`
+      return this.spentList.filter(spent => spent.date.substring(0, 7) === newMonthYear)
     },
     getTotal() {
       return this.getSpents.filter(spent => spent.creditCard).reduce((acc, spent) => acc + Number(spent.spentValue), 0)
@@ -78,6 +82,9 @@ export const useSpentsStore = defineStore('spents', {
     }
   },
   actions: {
+    startDate(date) {
+      return this.monthYear = date
+    },
     applyRightLight(categories) {
       const summary = this.summaryList.summary
       const category = summary.map(item => item.category)
