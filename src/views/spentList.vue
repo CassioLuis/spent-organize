@@ -47,7 +47,7 @@ watch(date, () => {
 })
 </script>
 <template>
-  <div class="flex w-full h-[800px] gap-3 mb-4">
+  <div class="flex w-full h-[92vh] gap-3 mb-4">
     <div class="grow basis-1 flex flex-col h-full gap-3">
       <div class="flex border rounded-sm border-gray-600 p-1 items-center">
         <font-awesome-icon :icon="['fas', 'chevron-right']" @click="changePeriod('prev')"

@@ -24,10 +24,12 @@ const update = async (id, name) => {
     subCategory: data.category.subCategory
   }
   await updateSubCategorie(body)
+  data.category.subCategory = ''
 }
+
 </script>
 <template>
-  <div class="p-4 border rounded-sm border-gray-500 w-[100%] h-auto">
+  <div class="p-4 border rounded-sm border-gray-500">
     <div class="flex gap-4">
       <input @keyup.enter="addCategory(data.category)" v-model="data.category.name"
         placeholder="Digite uma categoria e pressione enter!" class="w-full p-2 text-black rounded">
@@ -41,13 +43,12 @@ const update = async (id, name) => {
             <th class="grow basis-1 text-center"></th>
           </tr>
         </thead>
-        <tbody class="text-sm max-h-[70vh] flex flex-col overflow-auto px-4">
+        <tbody class="text-sm flex flex-col overflow-auto px-4">
           <tr v-for="item in getCategories" class="flex py-1 font-semibold border-b border-gray-600">
             <td class="grow basis-1 flex items-center">{{ item.name }}</td>
             <td class="grow basis-1 flex items-center justify-center">
-              <Selector @change="update(item._id, item.name)" :value="item.subCategory" v-model="data.category.subCategory" :required="true"
-                :options="data.subCategories"
-                class="h-8 px-2 bg-gray-800 text-white border rounded border-gray-600 cursor-pointer" />
+              <Selector @change="update(item._id, item.name)" :value="item.subCategory"
+                v-model="data.category.subCategory" :required="true" :options="data.subCategories" class="btn" />
             </td>
             <td class="grow basis-1 flex items-center justify-end">
               <font-awesome-icon class="cursor-pointer text-red-400" :icon="['fas', 'trash-can']"

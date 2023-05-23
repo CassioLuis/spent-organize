@@ -1,10 +1,18 @@
 <script setup>
 import { reactive } from 'vue'
+import { storeToRefs } from 'pinia';
 import { convertToCurrency } from '@/utils/convertToCurrency.js'
 import { useSpentsStore } from '@/stores/spents.js'
+import Selector from '@/components/Selector.vue';
+import { useCategoriesStore } from '@/stores/categories';
 
 const spents = useSpentsStore()
 const { removeSpent } = spents
+
+const categories = useCategoriesStore()
+const { getCategories } = storeToRefs(categories)
+// const { httpRequestCategories } = categories
+// httpRequestCategories()
 
 const props = defineProps({
   spentList: {
@@ -76,13 +84,14 @@ const data = reactive({
       <tbody>
         <tr v-for="item in spentList" :key="item._id" class="h-12 border-b border-gray-600">
           <td class="text-center">
-            <input class="cursor-pointer" type="checkbox" :checked="item.creditCard" @change="isACreditCardSpent(item)">
+            <input class="btn cursor-pointer" type="checkbox" :checked="item.creditCard" @change="isACreditCardSpent(item)">
           </td>
           <td class="text-left text-xs text-gray-400">{{ item.presentationDate }}</td>
           <td>{{ item.description }}</td>
-          <td>
-            <span class="p-1 flex items-center justify-center rounded-sm border border-gray-600 bg-gray-700 text-xs font-semibold text-gray-200">{{
-              item.category }}</span>
+          <td class="flex justify-center items-center text-center h-full">
+            <Selector :options="getCategories" :value="item.category" class="btn w-28" />
+            <!-- <span class="p-1 flex items-center justify-center rounded-sm border border-gray-600 bg-gray-700 text-xs font-semibold text-gray-200">{{
+              item.category }}</span> -->
           </td>
           <td class="text-center">{{ item.presentationQuota }} </td>
           <td class="text-right">{{ convertToCurrency(item.spentValue) }} </td>
