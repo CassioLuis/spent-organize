@@ -8,7 +8,9 @@ import { RouterLink, RouterView } from 'vue-router'
         <RouterLink to="/" class="btn">Controle de Gastos</RouterLink>
         <RouterLink to="/categories" class="btn">Categories</RouterLink>
       </div>
-      <RouterView />
+      <div>
+        <RouterView />
+      </div>
     </div>
   </div>
 </template>

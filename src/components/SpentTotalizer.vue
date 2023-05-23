@@ -27,7 +27,7 @@ watch(getSpents, () => {
           </template>
           <template #accordion-content>
             <li v-if="totalizer.expanded" v-for="{ description, spentValue, _id } in totalizer.spents" :key="_id"
-              class="overflow-hidden flex justify-between gap-2 text-sm text-gray-400 border-gray-600">
+              class="overflow-hidden flex justify-between gap-2 text-sm text-gray-400">
               <div class="flex justify-between items-center py-4 px-5 w-full">
                 <span>{{ description }}</span>
                 <span>{{ convertToCurrency(spentValue) }}</span>
