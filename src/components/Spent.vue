@@ -7,7 +7,7 @@ import Selector from '@/components/Selector.vue';
 import { useCategoriesStore } from '@/stores/categories';
 
 const spents = useSpentsStore()
-const { removeSpent } = spents
+const { removeSpent, updateSpentCategory } = spents
 
 const categories = useCategoriesStore()
 const { getCategories } = storeToRefs(categories)
@@ -24,6 +24,7 @@ const props = defineProps({
 const data = reactive({
   sortKey: '',
   sortDirection: 'asc',
+  category: '',
   tableHeaders: [
     {
       presentationName: '',
@@ -67,6 +68,13 @@ const data = reactive({
     },
   ]
 })
+
+const update = () => {
+  const body = {
+
+  }
+  updateSpent(body)
+}
 </script>
 <template>
   <div class="font-semibold text-sm">
@@ -89,7 +97,7 @@ const data = reactive({
           <td class="text-left text-xs text-gray-400">{{ item.presentationDate }}</td>
           <td>{{ item.description }}</td>
           <td class="flex justify-center items-center text-center h-full">
-            <Selector :options="getCategories" :value="item.category" class="btn w-28" />
+            <Selector @change="updateSpentCategory(item._id, data.category)" v-model="data.category" :options="getCategories" :value="item.category" class="btn w-28" />
             <!-- <span class="p-1 flex items-center justify-center rounded-sm border border-gray-600 bg-gray-700 text-xs font-semibold text-gray-200">{{
               item.category }}</span> -->
           </td>

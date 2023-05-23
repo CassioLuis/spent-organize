@@ -22,3 +22,15 @@ export function deleteSpent(spentId) {
   const req = axios.delete(`${baseURL}/spents/${spentId}`)
   return req
 }
+
+export async function updateSpent(body) {
+  try {
+    console.log(body);
+    const req = await axios.patch(`${baseURL}/spents/${body._id}`, body)
+    return req
+  }
+  catch (error) {
+    const { message } = error.response.data
+    return alert(message)
+  }
+}

@@ -1,5 +1,6 @@
 import { defineStore, storeToRefs } from 'pinia'
 import { getAllSpents } from '@/services/spents.service.js'
+import { updateSpent } from '@/services/spents.service'
 import { deleteSpent, postSpent } from '@/services/spents.service.js'
 import { useCategoriesStore } from '@/stores/categories.js'
 
@@ -106,6 +107,13 @@ export const useSpentsStore = defineStore('spents', {
     },
     resetSummary() {
       return this.summaryList = this.handleTotals
+    },
+    async updateSpentCategory(id, value) {
+      const updateItem = this.spentList.find(item => item._id === id)
+      const indexOfUpdateItem = this.spentList.indexOf(updateItem)
+      this.spentList[indexOfUpdateItem].category = value
+      const body = { ...updateItem, category: value }
+      await updateSpent(body)
     },
     async httpRequestSpents() {
       const categories = useCategoriesStore()
