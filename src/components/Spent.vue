@@ -37,7 +37,7 @@ const data = reactive({
     {
       presentationName: 'Categoria',
       originalName: 'category',
-      classStyle: 'cursor-pointer w-1',
+      classStyle: 'cursor-pointer w-1 text-center',
       icon: ['fas', 'sort-down']
     },
     {

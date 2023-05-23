@@ -28,10 +28,11 @@ export const useSpentsStore = defineStore('spents', {
     },
     handleTotals() {
       const spents = this.getSpents
-      const spentCategories = [...new Set(spents.map(spent => spent.category))];
+      const spentCategories = [...new Set(spents.map(spent => spent.category))]
+
       const totalizer = spentCategories.map(category => {
-        const spentsByCategory = spents.filter(spent => spent.category === category);
-        const totalSpentByCategory = spentsByCategory.reduce((acc, spent) => acc + Number(spent.spentValue), 0);
+        const spentsByCategory = spents.filter(spent => spent.category === category)
+        const totalSpentByCategory = spentsByCategory.reduce((acc, spent) => acc + Number(spent.spentValue), 0)
         return {
           category: category,
           totalSpent: totalSpentByCategory,
@@ -46,8 +47,12 @@ export const useSpentsStore = defineStore('spents', {
       const resultado = totalizer.reduce((acumulador, item) => {
         const { category, totalSpent } = item
         const subcategories = getCategories.value.filter(cat => cat.name === category)
-          .map(subcat => ({ subcategoria: subcat.subCategory, valor: totalSpent }))
-
+          .map(subcat => {
+            return {
+              subcategoria: subcat.subCategory || 'Não Cadastrado',
+              valor: totalSpent
+            }
+          })
         const subcategoriestotal = { category, subCat: subcategories[0].subcategoria, totalSpent }
         acumulador.valorTotal += totalSpent;
         acumulador.listaCategorias.push(subcategoriestotal);
