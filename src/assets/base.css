@@ -146,9 +146,11 @@ body {
 
 .dp__main,
 .dp__input_wrap {
-  border: 1px solid white !important;
-  height: 100px !important;
-  display: flex
+  /* border: 1px solid white !important; */
+  /* height: 100% !important; */
+  /* width: 100% !important; */
+  /* display: flex; */
+  /* justify-content: center !important */
 }
 
 .dp__theme_dark {

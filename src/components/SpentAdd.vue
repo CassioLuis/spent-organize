@@ -50,7 +50,7 @@ const addSpent = async () => {
         <div class="flex flex-col grow basis-1">
           <label for="date">Data:</label>
           <Datepicker id="date" v-model="newSpent.date" auto-apply locale="pt-BR" :enable-time-picker="false"
-            format="dd/MM/yyyy" dark class="h-8 mb-2" />
+            format="dd/MM/yyyy" dark class="mb-2 h-8" />
           <label for="description">Descrição:</label>
           <input id="description" type="text" v-model="newSpent.description" v-focus class="input">
         </div>
