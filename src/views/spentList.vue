@@ -49,7 +49,7 @@ watch(date, () => {
       <div class="flex border rounded-sm border-gray-600 p-1 items-center">
         <font-awesome-icon :icon="['fas', 'chevron-right']" @click="changePeriod('prev')"
           class="rotate-180 cursor-pointer w-2 hover:text-gray-100 transition-all px-2 py-4 h-full rounded-r" />
-        <Datepicker v-model="date" month-picker auto-apply locale="pt-BR" dark class="grow basis-1 flex justify-center" />
+        <Datepicker v-model="date" month-picker auto-apply locale="pt-BR" dark class="grow basis-1 flex justify-center h-28" />
         <font-awesome-icon :icon="['fas', 'chevron-right']" @click="changePeriod('next')"
           class="cursor-pointer w-2 hover:text-gray-100 transition-all px-2 py-4 h-full rounded-r" />
         <div class="flex items-center justify-center flex-grow basis-1 h-full font-semibold">{{
