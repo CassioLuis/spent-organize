@@ -1,13 +1,16 @@
 <script setup>
+import { reactive, watch } from 'vue'
+import { storeToRefs } from 'pinia'
 import { useCategoriesStore } from '@/stores/categories.js'
 import Selector from '@/components/Selector.vue'
-import { reactive } from 'vue'
-import { storeToRefs } from 'pinia'
+import { useSpentsStore } from '@/stores/spents.js'
+
+const spent = useSpentsStore()
+const { resetSummary } = spent
 
 const categories = useCategoriesStore()
-const { getCategories } = storeToRefs(categories)
-const { addCategory, httpRequestCategories, removeCategory, updateSubCategorie } = categories
-httpRequestCategories()
+const { getFilteredCategories } = storeToRefs(categories)
+const { addCategory, removeCategory, updateSubCategorie } = categories
 
 const data = reactive({
   category: {
@@ -27,6 +30,10 @@ const update = async (id, name) => {
   data.category.subCategory = ''
 }
 
+watch(getFilteredCategories, () => {
+  resetSummary()
+}, { deep: true })
+
 </script>
 <template>
   <div class="p-4 border rounded-sm border-gray-500">
@@ -44,15 +51,16 @@ const update = async (id, name) => {
           </tr>
         </thead>
         <tbody class="text-sm flex flex-col overflow-auto px-4">
-          <tr v-for="item in getCategories" class="flex py-1 font-semibold border-b border-gray-600">
-            <td class="grow basis-1 flex items-center">{{ item.name }}</td>
+          <tr v-for="({ _id, name, subCategory }) in getFilteredCategories" :key="_id"
+            class="flex py-1 font-semibold border-b border-gray-600">
+            <td class="grow basis-1 flex items-center">{{ name }}</td>
             <td class="grow basis-1 flex items-center justify-center">
-              <Selector @change="update(item._id, item.name)" :value="item.subCategory"
-                v-model="data.category.subCategory" :required="true" :options="data.subCategories" class="btn" />
+              <Selector @change="update(_id, name)" :value="subCategory" v-model="data.category.subCategory"
+                :options="data.subCategories" class="btn" />
             </td>
             <td class="grow basis-1 flex items-center justify-end">
               <font-awesome-icon class="cursor-pointer text-red-400" :icon="['fas', 'trash-can']"
-                @click="removeCategory(item._id)" />
+                @click="removeCategory(_id)" />
             </td>
           </tr>
         </tbody>

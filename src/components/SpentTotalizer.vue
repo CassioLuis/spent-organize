@@ -1,9 +1,9 @@
 <script setup>
-import Accordion from '@/components/Accordion.vue'
 import { watch } from 'vue'
-import { convertToCurrency } from '@/utils/convertToCurrency.js'
-import { useSpentsStore } from '@/stores/spents.js'
 import { storeToRefs } from 'pinia'
+import { convertToCurrency } from '@/utils/convertToCurrency.js'
+import Accordion from '@/components/Accordion.vue'
+import { useSpentsStore } from '@/stores/spents.js'
 
 const spent = useSpentsStore()
 const { getSpents, getSummary } = storeToRefs(spent)
@@ -11,7 +11,8 @@ const { expand, resetSummary, applyRightLight, removeRightLight } = spent
 
 watch(getSpents, () => {
   resetSummary()
-})
+}, { deep: true })
+
 </script >
 <template>
   <div class="flex flex-col h-full justify-between">

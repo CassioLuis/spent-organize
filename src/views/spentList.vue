@@ -12,14 +12,11 @@ import { objDateToStringDate } from '@/utils/objDateToStringDate.js'
 
 const spents = useSpentsStore()
 const { getSpents, getTotal, getSummary } = storeToRefs(spents)
-const { changeMonth, httpRequestSpents, startDate } = spents
+const { changeMonth, } = spents
 
 const month = new Date().getMonth()
 const year = new Date().getFullYear()
 const date = ref({ month, year });
-
-startDate(date)
-httpRequestSpents()
 
 const incrementsOrDecrementsPeriod = (date, param) => {
   const stringDate = objDateToStringDate(date)

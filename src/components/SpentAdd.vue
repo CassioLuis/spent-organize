@@ -10,7 +10,7 @@ const spents = useSpentsStore()
 const { add } = spents
 
 const categories = useCategoriesStore()
-const { getCategories } = storeToRefs(categories)
+const { getFilteredCategories } = storeToRefs(categories)
 
 const data = reactive({
   showForm: false,
@@ -57,7 +57,7 @@ const addSpent = async () => {
         <div class="flex flex-col grow basis-1">
           <div class="flex flex-col grow">
             <label for="categories">Categoria:</label>
-            <Selector :options="getCategories" v-model="newSpent.category" class="input" />
+            <Selector :options="getFilteredCategories" v-model="newSpent.category" class="input" />
           </div>
           <div class="flex grow gap-2">
             <div class="flex flex-col grow justify-between">

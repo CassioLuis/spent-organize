@@ -25,7 +25,6 @@ export function deleteSpent(spentId) {
 
 export async function updateSpent(body) {
   try {
-    console.log(body);
     const req = await axios.patch(`${baseURL}/spents/${body._id}`, body)
     return req
   }

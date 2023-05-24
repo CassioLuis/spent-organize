@@ -1,7 +1,5 @@
 import { defineStore, storeToRefs } from 'pinia'
-import { getAllSpents } from '@/services/spents.service.js'
-import { updateSpent } from '@/services/spents.service'
-import { deleteSpent, postSpent } from '@/services/spents.service.js'
+import { deleteSpent, postSpent, updateSpent, getAllSpents } from '@/services/spents.service.js'
 import { useCategoriesStore } from '@/stores/categories.js'
 
 export const useSpentsStore = defineStore('spents', {
@@ -47,14 +45,15 @@ export const useSpentsStore = defineStore('spents', {
 
       const resultado = totalizer.reduce((acumulador, item) => {
         const { category, totalSpent } = item
-        const subcategories = getCategories.value.filter(cat => cat.name === category)
-          .map(subcat => {
-            return {
-              subcategoria: subcat.subCategory || 'Não Cadastrado',
-              valor: totalSpent
-            }
-          })
-        const subcategoriestotal = { category, subCat: subcategories[0].subcategoria, totalSpent }
+        const categories = getCategories.value.filter(cat => cat.name === category) 
+        const subCategories = categories.map(subcat => {
+          return {
+            subCat: subcat.subCategory || 'Não Conciliado',
+            valor: totalSpent
+          }
+        })
+        const [{ subCat }] = subCategories
+        const subcategoriestotal = { category, subCat, totalSpent }
         acumulador.valorTotal += totalSpent;
         acumulador.listaCategorias.push(subcategoriestotal);
 
@@ -88,9 +87,6 @@ export const useSpentsStore = defineStore('spents', {
     }
   },
   actions: {
-    startDate(date) {
-      return this.monthYear = date
-    },
     applyRightLight(categories) {
       const summary = this.summaryList.summary
       const category = summary.map(item => item.category)
@@ -110,15 +106,15 @@ export const useSpentsStore = defineStore('spents', {
     },
     async updateSpentCategory(id, value) {
       const updateItem = this.spentList.find(item => item._id === id)
-      const indexOfUpdateItem = this.spentList.indexOf(updateItem)
-      this.spentList[indexOfUpdateItem].category = value
-      const body = { ...updateItem, category: value }
-      await updateSpent(body)
+      updateItem.category = value
+      await updateSpent(updateItem)
+    },
+    async updateSpentCreditCard(id) {
+      const updateItem = this.spentList.find(item => item._id === id)
+      updateItem.creditCard = !updateItem.creditCard
+      await updateSpent(updateItem)
     },
     async httpRequestSpents() {
-      const categories = useCategoriesStore()
-      const { httpRequestCategories } = categories
-      await httpRequestCategories()
       const response = await getAllSpents()
       this.spentList = response.data
     },
@@ -127,11 +123,12 @@ export const useSpentsStore = defineStore('spents', {
       await this.httpRequestSpents()
     },
     changeMonth(newMonth) {
-      this.month = newMonth
+      this.monthYear = newMonth
     },
     async removeSpent(spentId) {
       if (!confirm('Tem certeza que deseja excluir este item ?')) return
-      const index = this.spentList.indexOf(this.spentList.find(item => item._id === spentId));
+      const deleteItem = this.spentList.find(item => item._id === spentId)
+      const index = this.spentList.indexOf(deleteItem);
       this.spentList.splice(index, 1)
       await deleteSpent(spentId)
     },
