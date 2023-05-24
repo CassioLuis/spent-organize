@@ -41,7 +41,7 @@ watch(getSpents, () => {
     <div>
       <p class="text-center mb-4 text-lg font-semibold">Sub Totais</p>
       <div class="border border-gray-600 p-2">
-        <div class="flex justify-between font-semibold">
+        <div class="pb-2 flex justify-between font-semibold">
           <span>Total de Debitos</span>
           <span>{{ convertToCurrency(getSummary.summarySubTotals.valorTotal) }}</span>
         </div>

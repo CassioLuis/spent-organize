@@ -30,41 +30,41 @@ const update = async (id, name) => {
   data.category.subCategory = ''
 }
 
+console.log(getFilteredCategories.subCategory);
+
 watch(getFilteredCategories, () => {
   resetSummary()
 }, { deep: true })
 
 </script>
 <template>
-  <div class="p-4 border rounded-sm border-gray-500">
+  <div class="flex flex-col p-4 border rounded-sm border-gray-500 h-full">
     <div class="flex gap-4">
       <input @keyup.enter="addCategory(data.category)" v-model="data.category.name"
         placeholder="Digite uma categoria e pressione enter!" class="w-full p-2 text-black rounded">
     </div>
-    <div>
-      <table class="w-full rounded">
-        <thead class="text-xl block pt-4">
-          <tr class="flex border-b border-gray-600 py-2">
-            <th class="grow basis-1 text-left">Descrição</th>
-            <th class="grow basis-1 text-center">Sub-Categoria</th>
-            <th class="grow basis-1 text-center"></th>
-          </tr>
-        </thead>
-        <tbody class="text-sm flex flex-col overflow-auto px-4">
-          <tr v-for="({ _id, name, subCategory }) in getFilteredCategories" :key="_id"
-            class="flex py-1 font-semibold border-b border-gray-600">
-            <td class="grow basis-1 flex items-center">{{ name }}</td>
-            <td class="grow basis-1 flex items-center justify-center">
-              <Selector @change="update(_id, name)" :value="subCategory" v-model="data.category.subCategory"
-                :options="data.subCategories" class="btn" />
-            </td>
-            <td class="grow basis-1 flex items-center justify-end">
-              <font-awesome-icon class="cursor-pointer text-red-400" :icon="['fas', 'trash-can']"
-                @click="removeCategory(_id)" />
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <table class="flex flex-col w-full grow">
+      <thead class="text-xl block pt-4">
+        <tr class="flex border-b border-gray-600 py-2 pb-4 px-2">
+          <th class="grow basis-1 text-left">Descrição</th>
+          <th class="grow basis-1 text-center">Sub-Categoria</th>
+          <th class="grow basis-1 text-center"></th>
+        </tr>
+      </thead>
+      <tbody class="grow basis-1 text-sm flex flex-col overflow-y-auto">
+        <tr v-for="({ _id, name, subCategory }) in getFilteredCategories" :key="_id"
+          class="flex py-1 px-4 font-semibold border-b border-gray-600">
+          <td class="grow basis-1 flex items-center">{{ name }}</td>
+          <td class="grow basis-1 flex items-center justify-center">
+            <Selector @change="update(_id, name)" :value="subCategory" v-model="data.category.subCategory"
+              :options="data.subCategories" />
+          </td>
+          <td class="grow basis-1 flex items-center justify-end">
+            <font-awesome-icon class="cursor-pointer text-red-400" :icon="['fas', 'trash-can']"
+              @click="removeCategory(_id)" />
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>

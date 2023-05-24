@@ -90,8 +90,8 @@ const data = reactive({
           <td class="text-left text-xs text-gray-400">{{ item.presentationDate }}</td>
           <td>{{ item.description }}</td>
           <td class="flex justify-center items-center text-center h-full">
-            <Selector @change="updateSpentCategory(item._id, data.category)" v-model="data.category"
-              :options="getFilteredCategories" :value="item.category" class="btn w-28" />
+            <Selector @change="updateSpentCategory(item._id, data.category)" v-model="data.category" class="w-28"
+              :options="getFilteredCategories" :value="item.category"/>
           </td>
           <td class="text-center">{{ item.presentationQuota }} </td>
           <td class="text-right">{{ convertToCurrency(item.spentValue) }} </td>

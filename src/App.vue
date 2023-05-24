@@ -26,7 +26,7 @@ httpRequestSpents()
         <RouterLink to="/" class="btn">Controle de Gastos</RouterLink>
         <RouterLink to="/categories" class="btn">Categories</RouterLink>
       </div>
-      <div>
+      <div class="h-[92vh]">
         <RouterView />
       </div>
     </div>
