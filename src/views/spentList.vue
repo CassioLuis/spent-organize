@@ -71,34 +71,3 @@ watch(date, () => {
     </div>
   </div>
 </template>
-<style>
-.dp__pointer {
-  width: 100% !important;
-}
-
-.mx-input {
-  @apply h-full w-full cursor-pointer text-center font-semibold text-sm bg-gray-800 text-white rounded border border-gray-600
-}
-
-.mx-input-wrapper {
-  @apply h-full bg-gray-800
-}
-
-.mx-icon-calendar,
-.mx-icon-clear {
-  @apply text-white
-}
-
-.mx-calendar-header,
-.mx-calendar {
-  @apply bg-gray-800 text-white rounded
-}
-
-.mx-calendar-content .dp__overlay_cell_active {
-  @apply bg-gray-600 !important
-}
-
-.dp__overlay_cell:hover {
-  @apply bg-gray-300
-}
-</style>
