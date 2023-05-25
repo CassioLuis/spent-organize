@@ -23,45 +23,46 @@ const data = reactive({
   sortKey: '',
   sortDirection: 'asc',
   category: '',
+  tableHeadersDefaultStyle: ' cursor-pointer font-semibold',
   tableHeaders: [
     {
       presentationName: '',
-      classStyle: 'cursor-pointer w-1 text-transparent',
+      classStyle: 'w-1 text-transparent',
       icon: ['fas', 'sort-down']
     },
     {
       presentationName: 'Data',
       originalName: 'date',
-      classStyle: 'cursor-pointer w-10',
+      classStyle: 'w-10 text-left',
       icon: ['fas', 'sort-down'],
     },
     {
       presentationName: 'Descrição',
       originalName: 'description',
-      classStyle: 'cursor-pointer w-10',
+      classStyle: 'w-10 text-left',
       icon: ['fas', 'sort-down'],
     },
     {
       presentationName: 'Categoria',
       originalName: 'category',
-      classStyle: 'cursor-pointer w-1 text-center',
+      classStyle: 'w-1 text-center',
       icon: ['fas', 'sort-down']
     },
     {
       presentationName: 'Parc.',
       originalName: 'quota',
-      classStyle: 'cursor-pointer w-1 text-center',
+      classStyle: 'w-1 text-center',
       icon: ['fas', 'sort-down']
     },
     {
       presentationName: 'Valor',
       originalName: 'spentValue',
-      classStyle: 'cursor-pointer w-10 text-right',
+      classStyle: 'w-10 text-right',
       icon: ['fas', 'sort-down']
     },
     {
       presentationName: '',
-      classStyle: 'cursor-pointer w-1 text-transparent',
+      classStyle: 'w-1 text-transparent',
       icon: ['fas', 'sort-down']
     },
   ]
@@ -71,9 +72,9 @@ const data = reactive({
 <template>
   <div class="font-semibold text-sm">
     <table class="h-full w-full rounded">
-      <thead class="text-lg text-left">
+      <thead class="text-lg">
         <tr class="border-b border-gray-600">
-          <th v-for="(tableHeader, index) in data.tableHeaders" :key="index" :class="tableHeader.classStyle"
+          <th v-for="(tableHeader, index) in data.tableHeaders" :key="index" :class="tableHeader.classStyle + data.tableHeadersDefaultStyle"
             @click="sortBy(tableHeader.originalName)">
             {{ tableHeader.presentationName }}
             <font-awesome-icon v-if="sortKey === tableHeader.originalName" :icon="tableHeader.icon" :class="iconRotate"
@@ -91,7 +92,7 @@ const data = reactive({
           <td>{{ item.description }}</td>
           <td class="flex justify-center items-center text-center h-full">
             <Selector @change="updateSpentCategory(item._id, data.category)" v-model="data.category" class="w-28"
-              :options="getFilteredCategories" :value="item.category"/>
+              :options="getFilteredCategories" :value="item.category" :class="{ 'btn-danger': !item.category, 'btn': item.category }"/>
           </td>
           <td class="text-center">{{ item.presentationQuota }} </td>
           <td class="text-right">{{ convertToCurrency(item.spentValue) }} </td>

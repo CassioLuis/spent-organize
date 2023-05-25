@@ -72,38 +72,7 @@ body {
 }
 
 .input {
-  @apply mb-2 h-8 px-2 bg-gray-800 text-white border rounded border-gray-600 cursor-pointer;
-}
-
-.dp__pointer {
-  /* width: 100% !important; */
-}
-
-.mx-input {
-  @apply h-full w-full cursor-pointer text-center font-semibold text-sm bg-gray-800 text-white rounded border border-gray-600;
-}
-
-.dp__input {
-  height: 100% !important
-  /* @apply h-full bg-gray-800 input; */
-}
-
-.mx-icon-calendar,
-.mx-icon-clear {
-  @apply text-white;
-}
-
-.mx-calendar-header,
-.mx-calendar {
-  @apply bg-gray-800 text-white rounded;
-}
-
-.mx-calendar-content .dp__overlay_cell_active {
-  @apply bg-gray-600 !important;
-}
-
-.dp__overlay_cell:hover {
-  @apply bg-gray-300;
+  @apply mb-2 px-2 py-2 h-9 bg-gray-800 text-white border rounded border-gray-600 cursor-pointer
 }
 
 :root {
@@ -123,7 +92,7 @@ body {
     --dp-cell-padding: 5px; /*Padding in the cell*/
     --dp-common-padding: 10px; /*Common padding used*/
     --dp-input-icon-padding: 35px; /*Padding on the left side of the input if icon is present*/
-    --dp-input-padding: 6px 30px 6px 12px; /*Padding in the input*/
+    --dp-input-padding: 0.5rem 30px 0.5rem 12px !important; /*Padding in the input*/
     --dp-menu-min-width: 260px; /*Adjust the min width of the menu*/
     --dp-action-buttons-padding: 2px 5px; /*Adjust padding for the action buttons in action row*/
     --dp-row-maring:  5px 0; /*Adjust the spacing between rows in the calendar*/
@@ -144,13 +113,16 @@ body {
     --dp-transition-timing: ease-out; /*Timing on slide animations*/
 }
 
-/* .dp__main, */
+.dp__input,
+.dp__main div {
+  @apply text-center font-semibold h-full
+}
+
 .dp__input_wrap {
-  /* border: 1px solid white !important; */
-  height: 100% !important;
-  /* width: 100% !important; */
-  /* display: flex; */
-  /* justify-content: center !important */
+  @apply h-full
+}
+.dp__overlay_cell:hover {
+  @apply bg-gray-300;
 }
 
 .dp__theme_dark {

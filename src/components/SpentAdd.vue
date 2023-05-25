@@ -50,7 +50,7 @@ const addSpent = async () => {
         <div class="flex flex-col grow basis-1">
           <label for="date">Data:</label>
           <Datepicker id="date" v-model="newSpent.date" auto-apply locale="pt-BR" :enable-time-picker="false"
-            format="dd/MM/yyyy" dark class="mb-2 h-8" />
+            format="dd/MM/yyyy" dark class="mb-2 h-9" />
           <label for="description">Descrição:</label>
           <input id="description" type="text" v-model="newSpent.description" v-focus class="input">
         </div>
@@ -59,11 +59,10 @@ const addSpent = async () => {
             <label for="categories">Categoria:</label>
             <Selector :options="getFilteredCategories" v-model="newSpent.category" class="input" />
           </div>
-          <div class="flex grow gap-2">
+          <div class="flex grow gap-2 items-center">
             <div class="flex flex-col grow justify-between">
               <label for="spentValue">Parc:</label>
-              <Selector :options="data.quotas" v-model="newSpent.quota" :value="newSpent.quota" class="input"
-                @keyup.enter="addSpent" />
+              <Selector :options="data.quotas" v-model="newSpent.quota" :value="newSpent.quota" class="input" />
             </div>
             <div class="flex flex-col grow">
               <label for="spentValue">Valor:</label>
@@ -82,65 +81,3 @@ const addSpent = async () => {
     </button>
   </div>
 </template>
-
-<!-- <script>
-import Selector from '../components/Selector.vue'
-// import DatePicker from 'vue2-datepicker';
-// import 'vue2-datepicker/index.css';
-// import 'vue2-datepicker/locale/pt-br';
-// import { v4 as uuidv4 } from 'uuid';
-
-export default {
-  name: 'SpentAdd',
-  components: { Selector /*DatePicker*/ },
-  data() {
-    return {
-      showForm: true,
-      shouldFocus: true,
-      spent: {
-        // id: uuidv4(),
-        date: new Date().toISOString().substring(0, 10),
-        description: '',
-        category: '',
-        spentValue: '',
-        creditCard: true,
-        quota: ''
-      }
-    }
-  },
-  directives: {
-    focus: {
-      inserted(el) {
-        el.focus()
-      }
-    }
-  },
-  methods: {
-    showAddSpentForm() {
-      return this.showForm = !this.showForm
-    },
-    
-    addSpent() {
-      if (!this.inputValidation(this.spent)) return;
-      this.$store.commit('spents/addSpent', this.spent);
-      this.spent = {
-        // id: uuidv4(),
-        date: new Date().toISOString().substring(0, 10),
-        description: '',
-        category: this.spent.category,
-        spentValue: '',
-        creditCard: true,
-        quota: ''
-      }
-    }
-  },
-  computed: {
-    categories() {
-      return this.$store.state.categories.categoryList
-    },
-    generateQuota() {
-      return Array.from({ length: 24 }, (_, i) => String(i + 1));
-    }
-  }
-}
-</script> -->

@@ -22,7 +22,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <select v-model="selectedOption" :class="{ 'btn-danger': !selectedOption, 'btn': selectedOption }">
+  <select v-model="selectedOption" >
     <option v-for="option in options" :value="option.name || option">{{ option.name || option }}</option>
   </select>
 </template>

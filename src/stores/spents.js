@@ -46,13 +46,13 @@ export const useSpentsStore = defineStore('spents', {
       const resultado = totalizer.reduce((acumulador, item) => {
         const { category, totalSpent } = item
         const categories = getCategories.value.filter(cat => cat.name === category) 
-        const subCategories = categories.map(subcat => {
+        const subCategoriesTotals = categories.map(subcat => {
           return {
             subCat: subcat.subCategory || 'Não Conciliado',
             valor: totalSpent
           }
         })
-        const [{ subCat }] = subCategories
+        const [{ subCat }] = subCategoriesTotals
         const subcategoriestotal = { category, subCat, totalSpent }
         acumulador.valorTotal += totalSpent;
         acumulador.listaCategorias.push(subcategoriestotal);

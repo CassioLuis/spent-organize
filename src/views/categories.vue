@@ -57,7 +57,7 @@ watch(getFilteredCategories, () => {
           <td class="grow basis-1 flex items-center">{{ name }}</td>
           <td class="grow basis-1 flex items-center justify-center">
             <Selector @change="update(_id, name)" :value="subCategory" v-model="data.category.subCategory"
-              :options="data.subCategories" />
+              :options="data.subCategories" :class="{ 'btn-danger': !subCategory, 'btn': subCategory }"/>
           </td>
           <td class="grow basis-1 flex items-center justify-end">
             <font-awesome-icon class="cursor-pointer text-red-400" :icon="['fas', 'trash-can']"
