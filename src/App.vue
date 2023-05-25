@@ -1,12 +1,14 @@
 <script setup>
+import { storeToRefs } from 'pinia';
+import { ref, onMounted } from 'vue';
 import { RouterLink, RouterView } from 'vue-router'
-import { ref } from 'vue';
 import { useSpentsStore } from '@/stores/spents';
 import { useCategoriesStore } from '@/stores/categories';
 
 
 const spents = useSpentsStore()
 const { httpRequestSpents, changeMonth } = spents
+
 const categories = useCategoriesStore()
 const { httpRequestCategories } = categories
 
@@ -14,9 +16,11 @@ const month = new Date().getMonth()
 const year = new Date().getFullYear()
 const date = ref({ month, year });
 
-changeMonth(date)
-httpRequestCategories()
-httpRequestSpents()
+onMounted(async () => {
+  changeMonth(date)
+  await httpRequestCategories()
+  await httpRequestSpents()
+})
 
 </script>
 <template>

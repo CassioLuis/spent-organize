@@ -18,9 +18,13 @@ export const useSpentsStore = defineStore('spents', {
       return this.monthYear
     },
     getSpents() {
-      const { month, year } = this.monthYear
-      const newMonthYear = `${year}-${month.toString().length === 1 ? '0' + (month + 1) : month}`
+      const { year } = this.monthYear
+      const month = this.monthYear.month + 1
+      const newMonthYear = `${year}-${month.toString().length === 1 ? '0' + month : month}`
       return this.spentList.filter(spent => spent.date.substring(0, 7) === newMonthYear)
+      // const spent = this.spentList.filter(spent => spent._id === '646f6a7aca9c1c19956ed77b')
+      // console.log(spent[0].date.substring(0, 7), newMonthYear);
+      // return spent
     },
     getTotal() {
       return this.getSpents.filter(spent => spent.creditCard).reduce((acc, spent) => acc + Number(spent.spentValue), 0)
@@ -45,7 +49,7 @@ export const useSpentsStore = defineStore('spents', {
 
       const resultado = totalizer.reduce((acumulador, item) => {
         const { category, totalSpent } = item
-        const categories = getCategories.value.filter(cat => cat.name === category) 
+        const categories = getCategories.value.filter(cat => cat.name === category)
         const subCategoriesTotals = categories.map(subcat => {
           return {
             subCat: subcat.subCategory || 'Não Conciliado',
@@ -116,6 +120,7 @@ export const useSpentsStore = defineStore('spents', {
     },
     async httpRequestSpents() {
       const response = await getAllSpents()
+      if (!response) return
       this.spentList = response.data
     },
     async add(payload) {
@@ -125,12 +130,26 @@ export const useSpentsStore = defineStore('spents', {
     changeMonth(newMonth) {
       this.monthYear = newMonth
     },
-    async removeSpent(spentId) {
-      if (!confirm('Tem certeza que deseja excluir este item ?')) return
-      const deleteItem = this.spentList.find(item => item._id === spentId)
-      const index = this.spentList.indexOf(deleteItem);
+    async removeSpentWithQuotas(spentId) {
+      const spent = this.spentList.find(item => item._id === spentId)
+      const spentsQuotasToDelete = this.spentList.filter(item => item.uniqueForQuotas === spent.uniqueForQuotas)
+      spentsQuotasToDelete.forEach(item => {
+        const index = this.spentList.indexOf(item)
+        this.spentList.splice(index, 1)
+      })
+      await deleteSpent(spentId)
+    },
+    async removeSpentWithNoQuotas(spentId) {
+      const spent = this.spentList.find(item => item._id === spentId)
+      const index = this.spentList.indexOf(spent);
       this.spentList.splice(index, 1)
       await deleteSpent(spentId)
+    },
+    async removeSpent(spentId) {
+      if (!confirm('Tem certeza que deseja excluir este item ?')) return
+      const spent = this.spentList.find(item => item._id === spentId)
+      if (spent.uniqueForQuotas) return this.removeSpentWithQuotas(spentId)
+      return this.removeSpentWithNoQuotas(spentId)
     },
     expand(totalize) {
       const itemToExpand = this.summaryList.summary.find(item => item.category === totalize.category)

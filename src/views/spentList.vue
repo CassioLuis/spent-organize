@@ -12,7 +12,7 @@ import { objDateToStringDate } from '@/utils/objDateToStringDate.js'
 
 const spents = useSpentsStore()
 const { getSpents, getTotal, getSummary } = storeToRefs(spents)
-const { changeMonth, } = spents
+const { changeMonth } = spents
 
 const month = new Date().getMonth()
 const year = new Date().getFullYear()

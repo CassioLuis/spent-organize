@@ -1,8 +1,8 @@
 <script setup>
-import { reactive, computed } from 'vue';
+import { reactive } from 'vue';
 import { useSpentsStore } from '@/stores/spents.js';
 import { useCategoriesStore } from '@/stores/categories.js'
-import { inputValidation } from '@/utils/inputValidation.js'
+import { inputValidator } from '@/utils/inputValidator.js'
 import Selector from '@/components/Selector.vue'
 import { storeToRefs } from 'pinia';
 
@@ -13,13 +13,7 @@ const categories = useCategoriesStore()
 const { getFilteredCategories } = storeToRefs(categories)
 
 const data = reactive({
-  showForm: false,
-  generateQuota: function () {
-    return Array.from({ length: 24 }, (_, i) => String(i + 1))
-  },
-  quotas: computed(() => {
-    return data.generateQuota()
-  })
+  showForm: false
 })
 
 const newSpent = reactive({
@@ -38,7 +32,7 @@ const cleanInputs = () => {
 }
 
 const addSpent = async () => {
-  if (!inputValidation(newSpent)) return
+  if (!inputValidator(newSpent)) return
   await add(newSpent)
   cleanInputs()
 }
@@ -60,11 +54,11 @@ const addSpent = async () => {
             <Selector :options="getFilteredCategories" v-model="newSpent.category" class="input" />
           </div>
           <div class="flex grow gap-2 items-center">
-            <div class="flex flex-col grow justify-between">
-              <label for="spentValue">Parc:</label>
-              <Selector :options="data.quotas" v-model="newSpent.quota" :value="newSpent.quota" class="input" />
+            <div class="flex flex-col grow basis-1 justify-between">
+              <label for="spentQuotas">Parc:</label>
+              <input id="spentQuotas" type="number" v-model="newSpent.quota" class="input" />
             </div>
-            <div class="flex flex-col grow">
+            <div class="flex flex-col grow basis-1">
               <label for="spentValue">Valor:</label>
               <input id="spentValue" type="number" v-model="newSpent.spentValue" @keyup.enter="addSpent" class="input">
             </div>

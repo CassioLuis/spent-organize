@@ -114,7 +114,7 @@ body {
 }
 
 .dp__input,
-.dp__main div {
+.dp__main > div {
   @apply text-center font-semibold h-full
 }
 
