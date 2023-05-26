@@ -56,11 +56,11 @@ const addSpent = async () => {
           <div class="flex grow gap-2 items-center">
             <div class="flex flex-col grow basis-1 justify-between">
               <label for="spentQuotas">Parc:</label>
-              <input id="spentQuotas" type="number" v-model="newSpent.quota" class="input" />
+              <input id="spentQuotas" type="number" v-model="newSpent.quota" class="input w-full" />
             </div>
             <div class="flex flex-col grow basis-1">
               <label for="spentValue">Valor:</label>
-              <input id="spentValue" type="number" v-model="newSpent.spentValue" @keyup.enter="addSpent" class="input">
+              <input id="spentValue" type="number" v-model="newSpent.spentValue" @keyup.enter="addSpent" class="input w-full">
             </div>
           </div>
         </div>

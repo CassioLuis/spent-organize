@@ -16,6 +16,6 @@ export const inputValidator = (input) => {
     const { msg } = item
     return `${acc + msg}!\n`
   }, '')
-  if (!(error.length === 0)) return alert(err);
+  if (error.length) return alert(err);
   return true
 }
