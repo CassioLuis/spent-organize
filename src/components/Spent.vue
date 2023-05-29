@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, computed, onMounted } from 'vue'
+import { reactive, watch } from 'vue'
 import { storeToRefs } from 'pinia';
 import { convertToCurrency } from '@/utils/convertToCurrency.js'
 import { useSpentsStore } from '@/stores/spents.js'

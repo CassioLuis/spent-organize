@@ -5,14 +5,15 @@ import { storeToRefs } from 'pinia';
 import SpentAdd from '@/components/SpentAdd.vue'
 import Spent from '@/components/Spent.vue'
 import SpentTotalizer from '@/components/SpentTotalizer.vue';
+import SpentChart from '../components/SpentChart.vue';
 import { convertToCurrency } from '@/utils/convertToCurrency.js'
 import { convertDateStringToUTCDate } from '@/utils/convertDateStringToUTCDate.js'
 import { objDateToStringDate } from '@/utils/objDateToStringDate.js'
 
 
 const spents = useSpentsStore()
-const { getSpents, getTotal, getSummary } = storeToRefs(spents)
-const { changeMonth } = spents
+const { getSpents, getTotal, getSummary, getSpentsToChart } = storeToRefs(spents)
+const { changeMonth, changeCategory } = spents
 
 const month = new Date().getMonth()
 const year = new Date().getFullYear()
@@ -49,7 +50,8 @@ watch(date, () => {
       <div class="flex border rounded-sm border-gray-600 p-1 items-center">
         <font-awesome-icon :icon="['fas', 'chevron-right']" @click="changePeriod('prev')"
           class="rotate-180 cursor-pointer w-2 hover:text-gray-100 transition-all px-2 py-4 h-full rounded-r" />
-        <Datepicker v-model="date" month-picker auto-apply locale="pt-BR" dark class="grow basis-1 flex justify-center h-14" />
+        <Datepicker v-model="date" month-picker auto-apply locale="pt-BR" dark
+          class="grow basis-1 flex justify-center h-14" />
         <font-awesome-icon :icon="['fas', 'chevron-right']" @click="changePeriod('next')"
           class="cursor-pointer w-2 hover:text-gray-100 transition-all px-2 py-4 h-full rounded-r" />
         <div class="flex items-center justify-center flex-grow basis-1 h-full font-semibold">{{
@@ -64,9 +66,11 @@ watch(date, () => {
         </div>
       </div>
     </div>
-    <div
-      class="grow basis-1 flex flex-col justify-between p-3 border rounded-sm border-gray-600 font-semibold">
+    <!-- <div class="grow basis-1 flex flex-col justify-between p-3 border rounded-sm border-gray-600 font-semibold">
       <SpentTotalizer :totalizer-spents="getSummary" class="w-full" />
+    </div> -->
+    <div class="grow basis-1 flex flex-col justify-between p-3 border rounded-sm border-gray-600 font-semibold">
+      <SpentChart :data-chart="getSpentsToChart"/>
     </div>
   </div>
 </template>

@@ -1,7 +1,7 @@
 export const inputValidator = (input) => {
   const { category, date, description, quota, spentValue } = input
+  const error = []
 
-  let error = []
   if (!date) error.push({ msg: 'Data Inválida' });
   if (!description) error.push({ msg: 'Descrição Inválida' });
   if (!category) error.push({ msg: 'Categoria Inválida' });
@@ -12,10 +12,11 @@ export const inputValidator = (input) => {
     if (quota > 60) error.push({ msg: 'Parcela Inválida: é permitido no maximo 60' });
     if (quota < 2) error.push({ msg: 'Parcela Inválida: é permitido no minimo 2' });
   }
-  const err = error.reduce((acc, item) => {
+  const message = error.reduce((acc, item) => {
     const { msg } = item
     return `${acc + msg}!\n`
   }, '')
-  if (error.length) return alert(err);
+
+  if (error.length) return alert(message);
   return true
 }

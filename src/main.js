@@ -6,6 +6,7 @@ import App from './App.vue'
 import router from './router'
 import { createPinia } from 'pinia'
 
+import VueApexCharts from 'vue3-apexcharts'
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -20,6 +21,7 @@ const pinia = createPinia()
 app.use(pinia)
 app.use(router)
 app.use(createPinia)
+app.use(VueApexCharts)
 
 app.component('Datepicker', Datepicker);
 app.component('font-awesome-icon', FontAwesomeIcon)

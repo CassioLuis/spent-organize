@@ -5,6 +5,7 @@ import { useCategoriesStore } from '@/stores/categories.js'
 export const useSpentsStore = defineStore('spents', {
   state: () => {
     return {
+      category: '',
       monthYear: {},
       summaryList: {
         summary: [],
@@ -14,6 +15,37 @@ export const useSpentsStore = defineStore('spents', {
     }
   },
   getters: {
+    getSpentsToChart() {
+      const spentByCategory = this.spentList.filter((item) => item.category === this.category)
+      const totals = spentByCategory.reduce((acc, item) => {
+        const { date, spentValue } = item
+        const yearMonth = date.substring(0, 7)
+
+        if (!acc[yearMonth]) {
+          acc[yearMonth] = spentValue
+        } else {
+          acc[yearMonth] += spentValue
+        }
+        return acc
+      }, {})
+
+
+      const sortedTotals = Object.fromEntries(
+        Object.entries(totals).sort((a, b) => a[0].localeCompare(b[0]))
+      )
+
+      const roundedTotals = Object.fromEntries(
+        Object.entries(sortedTotals).map(([key, value]) => [key, parseFloat(value.toFixed(2))])
+      )
+
+      return {
+        xaxis: Object.keys(roundedTotals),
+        series: {
+          name: this.category,
+          data: Object.values(roundedTotals)
+        }
+      }
+    },
     getMonth() {
       return this.monthYear
     },
@@ -22,9 +54,6 @@ export const useSpentsStore = defineStore('spents', {
       const month = this.monthYear.month + 1
       const newMonthYear = `${year}-${month.toString().length === 1 ? '0' + month : month}`
       return this.spentList.filter(spent => spent.date.substring(0, 7) === newMonthYear)
-      // const spent = this.spentList.filter(spent => spent._id === '646f6a7aca9c1c19956ed77b')
-      // console.log(spent[0].date.substring(0, 7), newMonthYear);
-      // return spent
     },
     getTotal() {
       return this.getSpents.filter(spent => spent.creditCard).reduce((acc, spent) => acc + Number(spent.spentValue), 0)
@@ -47,7 +76,7 @@ export const useSpentsStore = defineStore('spents', {
       const categories = useCategoriesStore()
       const { getCategories } = storeToRefs(categories)
 
-      const resultado = totalizer.reduce((acumulador, item) => {
+      const resultado = totalizer.reduce((acc, item) => {
         const { category, totalSpent } = item
         const categories = getCategories.value.filter(cat => cat.name === category)
         const subCategoriesTotals = categories.map(subcat => {
@@ -58,10 +87,10 @@ export const useSpentsStore = defineStore('spents', {
         })
         const [{ subCat }] = subCategoriesTotals
         const subcategoriestotal = { category, subCat, totalSpent }
-        acumulador.valorTotal += totalSpent;
-        acumulador.listaCategorias.push(subcategoriestotal);
+        acc.valorTotal += totalSpent;
+        acc.listaCategorias.push(subcategoriestotal);
 
-        return acumulador;
+        return acc;
       }, { valorTotal: 0, listaCategorias: [] });
 
       return {
@@ -121,7 +150,7 @@ export const useSpentsStore = defineStore('spents', {
     async httpRequestSpents() {
       const response = await getAllSpents()
       if (!response) return
-      this.spentList = response.data
+      this.spentList = await response.data
     },
     async add(payload) {
       await postSpent(payload)
@@ -159,6 +188,9 @@ export const useSpentsStore = defineStore('spents', {
         item.expanded = false
       })
       this.summaryList.summary[index].expanded = !this.summaryList.summary[index].expanded
+    },
+    changeCategory(category) {
+      return this.category = category
     }
   }
 })
