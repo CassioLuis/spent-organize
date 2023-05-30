@@ -72,7 +72,7 @@ body {
 }
 
 .input {
-  @apply mb-2 px-2 py-2 h-9 bg-gray-800 text-white border rounded border-gray-600 cursor-pointer
+  @apply mb-2 px-2 py-2 h-9 bg-gray-800 text-white rounded border border-gray-600 cursor-pointer
 }
 
 :root {

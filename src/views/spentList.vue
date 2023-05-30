@@ -5,7 +5,7 @@ import { storeToRefs } from 'pinia';
 import SpentAdd from '@/components/SpentAdd.vue'
 import Spent from '@/components/Spent.vue'
 import SpentTotalizer from '@/components/SpentTotalizer.vue';
-import SpentChart from '../components/SpentChart.vue';
+import ChartLine from '@/components/ChartLine.vue';
 import { convertToCurrency } from '@/utils/convertToCurrency.js'
 import { convertDateStringToUTCDate } from '@/utils/convertDateStringToUTCDate.js'
 import { objDateToStringDate } from '@/utils/objDateToStringDate.js'
@@ -66,11 +66,11 @@ watch(date, () => {
         </div>
       </div>
     </div>
-    <!-- <div class="grow basis-1 flex flex-col justify-between p-3 border rounded-sm border-gray-600 font-semibold">
-      <SpentTotalizer :totalizer-spents="getSummary" class="w-full" />
-    </div> -->
     <div class="grow basis-1 flex flex-col justify-between p-3 border rounded-sm border-gray-600 font-semibold">
-      <SpentChart :data-chart="getSpentsToChart"/>
+      <SpentTotalizer :totalizer-spents="getSummary" class="w-full" />
+    </div>
+    <div class="grow basis-1 flex flex-col justify-between p-3 border rounded-sm border-gray-600 font-semibold">
+      <ChartLine />
     </div>
   </div>
 </template>

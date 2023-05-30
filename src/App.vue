@@ -3,7 +3,28 @@ import { ref, onMounted } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
 import { useSpentsStore } from '@/stores/spents'
 import { useCategoriesStore } from '@/stores/categories'
+import {
+  Chart as ChartJS,
+  Title,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  LineController,
+  LineElement,
+  PointElement
+} from 'chart.js'
 
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  Title,
+  Tooltip,
+  Legend,
+  LineController,
+  LineElement,
+  PointElement
+)
 
 const spents = useSpentsStore()
 const { httpRequestSpents, changeMonth } = spents
@@ -24,7 +45,7 @@ onMounted(async () => {
 </script>
 <template>
   <div class="flex justify-center pt-4 bg-gray-800 h-full w-full text-gray-300 font-roboto antialiased">
-    <div class="flex flex-col justify-start w-[1200px] px-4">
+    <div class="flex flex-col justify-start w-[1800px] px-4">
       <div class="pb-2 flex gap-1 w-full">
         <RouterLink to="/" class="btn">Controle de Gastos</RouterLink>
         <RouterLink to="/categories" class="btn">Categories</RouterLink>
