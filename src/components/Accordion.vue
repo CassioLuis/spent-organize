@@ -33,7 +33,7 @@ const onLeave = (el) => {
 </script>
 <template>
   <div class="transition-all">
-    <div class="flex flex-col border rounded-sm border-gray-600">
+    <div class="flex flex-col">
       <div class="flex justify-between cursor-pointer">
         <slot name="accordion-tittle">Accordion-tittle</slot>
       </div>

@@ -20,6 +20,7 @@ const data = reactive({
     datasets: []
   },
   options: {
+    responsive: true,
     interaction: {
       intersect: false,
       mode: 'index',
@@ -29,7 +30,6 @@ const data = reactive({
         tension: 0.2
       }
     },
-    responsive: true,
     plugins: {
       tooltip: {
         position: 'nearest',
@@ -154,10 +154,9 @@ watch(getSpentsToChart, (newValue) => {
 
 </script>
 <template>
-  <div class="flex flex-col gap-4 rounded">
+  <div class="flex flex-col gap-2 rounded">
     <Selector @change="changeCategory(data.category)" :options="getFilteredCategories" v-model="data.category"
       :value="data.category" class="btn w-full h-12" />
-    <Line :data="data.dataChart" :options="data.options" class="bg-gray-700 rounded-sm border border-gray-600" />
-    <!-- <Pie :data="data.dataChart" :options="data.options" class="bg-gray-700 rounded-sm border border-gray-600" /> -->
+    <Line :data="data.dataChart" :options="data.options" class="bg-gray-700 rounded" />
   </div>
 </template>

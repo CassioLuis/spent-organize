@@ -6,6 +6,7 @@ import SpentAdd from '@/components/SpentAdd.vue'
 import Spent from '@/components/Spent.vue'
 import SpentTotalizer from '@/components/SpentTotalizer.vue';
 import ChartLine from '@/components/ChartLine.vue';
+import ChartDoughnut from '@/components/ChartDoughnut.vue';
 import { convertToCurrency } from '@/utils/convertToCurrency.js'
 import { convertDateStringToUTCDate } from '@/utils/convertDateStringToUTCDate.js'
 import { objDateToStringDate } from '@/utils/objDateToStringDate.js'
@@ -46,8 +47,8 @@ watch(date, () => {
 </script>
 <template>
   <div class="flex w-full h-[92vh] gap-3 mb-4">
-    <div class="grow basis-1 flex flex-col h-full gap-3">
-      <div class="flex border rounded-sm border-gray-600 p-1 items-center">
+    <div class="grow basis-40 flex flex-col h-full gap-3">
+      <div class="flex rounded-sm border-gray-700 bg-gray-800 p-1 items-center">
         <font-awesome-icon :icon="['fas', 'chevron-right']" @click="changePeriod('prev')"
           class="rotate-180 cursor-pointer w-2 hover:text-gray-100 transition-all px-2 py-4 h-full rounded-r" />
         <Datepicker v-model="date" month-picker auto-apply locale="pt-BR" dark
@@ -57,7 +58,7 @@ watch(date, () => {
         <div class="flex items-center justify-center flex-grow basis-1 h-full font-semibold">{{
           convertToCurrency(getTotal) }}</div>
       </div>
-      <div class="flex flex-col h-full gap-2 p-3 border rounded-sm border-gray-600">
+      <div class="flex flex-col h-full gap-2 p-3 rounded-sm border-gray-700 bg-gray-800">
         <div class="flex flex-col grow basis-1 overflow-y-auto">
           <Spent :spent-list="getSpents" />
         </div>
@@ -66,11 +67,14 @@ watch(date, () => {
         </div>
       </div>
     </div>
-    <div class="grow basis-1 flex flex-col justify-between p-3 border rounded-sm border-gray-600 font-semibold">
+    <!-- <div class="grow basis-1 flex flex-col justify-between p-3 border-gray-700 bg-gray-800 rounded-sm font-semibold">
       <SpentTotalizer :totalizer-spents="getSummary" class="w-full" />
-    </div>
-    <div class="grow basis-1 flex flex-col justify-between p-3 border rounded-sm border-gray-600 font-semibold">
-      <ChartLine />
+    </div> -->
+    <div class="grow basis-1 rounded-sm font-semibold">
+      <div class="flex flex-col justify-between w-full gap-3 h-full">
+        <ChartDoughnut class="h-[40vh]"/>
+        <!-- <ChartLine /> -->
+      </div>
     </div>
   </div>
 </template>

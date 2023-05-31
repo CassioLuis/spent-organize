@@ -12,7 +12,9 @@ import {
   LinearScale,
   LineController,
   LineElement,
-  PointElement
+  PointElement,
+  DoughnutController,
+  ArcElement
 } from 'chart.js'
 
 ChartJS.register(
@@ -23,7 +25,9 @@ ChartJS.register(
   Legend,
   LineController,
   LineElement,
-  PointElement
+  PointElement,
+  DoughnutController,
+  ArcElement
 )
 
 const spents = useSpentsStore()
@@ -44,7 +48,7 @@ onMounted(async () => {
 
 </script>
 <template>
-  <div class="flex justify-center pt-4 bg-gray-800 h-full w-full text-gray-300 font-roboto antialiased">
+  <div class="flex justify-center pt-4 bg-gray-950 h-full w-full text-gray-300 font-roboto antialiased">
     <div class="flex flex-col justify-start w-[1800px] px-4">
       <div class="pb-2 flex gap-1 w-full">
         <RouterLink to="/" class="btn">Controle de Gastos</RouterLink>

@@ -15,6 +15,20 @@ export const useSpentsStore = defineStore('spents', {
     }
   },
   getters: {
+    getDataToDoughnutChart() {
+      const spents = this.getSpents
+      const spentCategories = [...new Set(spents.map(spent => spent.category))]
+
+      const totalizer = spentCategories.map(category => {
+        const spentsByCategory = spents.filter(spent => spent.category === category)
+        const totalSpentByCategory = spentsByCategory.reduce((acc, spent) => acc + Number(spent.spentValue), 0)
+        return totalSpentByCategory
+      })
+      return {
+        labels: spentCategories,
+        data: totalizer
+      }
+    },
     getSpentsToChart() {
       const spentByCategory = this.spentList.filter((item) => item.category === this.category)
       const totals = spentByCategory.reduce((acc, item) => {
@@ -123,7 +137,7 @@ export const useSpentsStore = defineStore('spents', {
     applyRightLight(categories) {
       const summary = this.summaryList.summary
       const category = summary.map(item => item.category)
-      const styles = 'bg-gray-700'
+      const styles = 'bg-gray-600'
       const categoryToStyle = category.map((item, index) => {
         const test = categories.includes(item)
         if (test) return summary[index].style = styles
