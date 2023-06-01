@@ -30,8 +30,6 @@ const update = async (id, name) => {
   data.category.subCategory = ''
 }
 
-console.log(getFilteredCategories.subCategory);
-
 watch(getFilteredCategories, () => {
   resetSummary()
 }, { deep: true })

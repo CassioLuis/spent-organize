@@ -29,7 +29,7 @@ export const useSpentsStore = defineStore('spents', {
         data: totalizer
       }
     },
-    getSpentsToChart() {
+    getDataToChartLine() {
       const spentByCategory = this.spentList.filter((item) => item.category === this.category)
       const totals = spentByCategory.reduce((acc, item) => {
         const { date, spentValue } = item
@@ -203,8 +203,8 @@ export const useSpentsStore = defineStore('spents', {
       })
       this.summaryList.summary[index].expanded = !this.summaryList.summary[index].expanded
     },
-    changeCategory(category) {
-      return this.category = category
-    }
+    // changeCategory(category) {
+    //   return this.category = category
+    // }
   }
 })

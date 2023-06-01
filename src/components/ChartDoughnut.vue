@@ -1,51 +1,76 @@
 <script setup>
 import { reactive, watch } from 'vue';
-import { storeToRefs } from 'pinia';
-import { useSpentsStore } from '@/stores/spents'
 import { Doughnut } from 'vue-chartjs'
 
-
-const spents = useSpentsStore()
-const { getDataToDoughnutChart } = storeToRefs(spents)
-const { changeCategory } = spents
+const props = defineProps({
+  dataDoughnut: {
+    type: Object,
+    required: true
+  }
+})
 
 const data = reactive({
-  category: 'Mercado',
   dataChart: {
-    datasets: []
+    labels: props.dataDoughnut.labels,
+    datasets: [
+      {
+        data: props.dataDoughnut.data
+      }
+    ]
   },
   options: {
     responsive: true,
     plugins: {
+      colors: {
+        forceOverride: true
+      },
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            let label = context.dataset.label || '';
+            if (label) {
+              label += ': ';
+            }
+            if (context.parsed.y !== null) {
+              label += new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(context.parsed);
+            }
+            return label;
+          }
+        }
+      },
+      // autocolors: {
+      //   mode: 'data',
+      //   offset: 10
+      // },
       legend: {
-        position: 'top',
+        position: 'right',
+        labels: {
+          color: 'white',
+          font: {
+            size: 14,
+          }
+        }
       },
       title: {
         display: true,
-        text: 'Resumo Mensal'
+        text: 'Resumo Mensal',
+        color: 'white'
       }
     }
   }
 })
 
-watch(getDataToDoughnutChart, (newValue) => {
+watch(props, (newValue) => {
   data.dataChart = {
-    labels: newValue.labels,
+    labels: newValue.dataDoughnut.labels,
     datasets: [
       {
         label: data.category,
-        data: newValue.data,
-        // borderColor: '#36A2EB',
-         backgroundColor: [
-          'rgb(255, 99, 132)',
-          'rgb(54, 162, 235)',
-          'rgb(255, 205, 86)'
-        ],
-        colorFont: 'white'
+        data: newValue.dataDoughnut.data,
+        borderColor: 'white'
       }
     ]
   }
-  changeCategory(data.category)
 }, { deep: true })
 
 </script>

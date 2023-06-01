@@ -4,15 +4,27 @@ import Selector from '@/components/Selector.vue'
 import { storeToRefs } from 'pinia';
 import { useCategoriesStore } from '@/stores/categories.js'
 import { useSpentsStore } from '@/stores/spents'
-import { Line, Pie } from 'vue-chartjs'
+import { Line } from 'vue-chartjs'
+import { useChartsStore } from '@/stores/Charts';
 
 
 const categories = useCategoriesStore()
 const { getFilteredCategories } = storeToRefs(categories)
 
 const spents = useSpentsStore()
-const { getSpentsToChart } = storeToRefs(spents)
-const { changeCategory } = spents
+// const { changeCategory } = spents
+
+const charts = useChartsStore()
+// const { getDataToChartLine } = storeToRefs(charts)
+const { changeCategory, getDataToChartLine } = charts
+
+
+const props = defineProps({
+  dataChartLine: {
+    type: Object,
+    required: true
+  }
+})
 
 const data = reactive({
   category: 'Mercado',
@@ -31,6 +43,9 @@ const data = reactive({
       }
     },
     plugins: {
+      colors: {
+        forceOverride: true
+      },
       tooltip: {
         position: 'nearest',
         callbacks: {
@@ -56,6 +71,7 @@ const data = reactive({
         align: 'center',
         labels: {
           textAlign: 'left',
+          color: 'white',
           font: {
             weight: 'bold'
           }
@@ -72,21 +88,19 @@ const data = reactive({
         grid: {
           display: true,
           color: 'gray'
-          // drawOnChartArea: false,
-          // drawTicks: false
         },
-        title: {
-          display: true,
-          text: 'Mês',
-          color: 'gray',
-          font: {
-            // family: 'Comic Sans MS',
-            // size: 20,
-            weight: 'bold',
-            lineHeight: 1.2,
-          },
-          // padding: { top: 30, left: 0, right: 0, bottom: 0 }
-        },
+        // title: {
+        //   display: true,
+        //   text: 'Mês',
+        //   color: 'gray',
+        //   font: {
+        //     // family: 'Comic Sans MS',
+        //     // size: 20,
+        //     weight: 'bold',
+        //     lineHeight: 1.2,
+        //   },
+        //   // padding: { top: 30, left: 0, right: 0, bottom: 0 }
+        // },
         ticks: {
           color: 'white',
           align: 'center',
@@ -100,21 +114,19 @@ const data = reactive({
         grid: {
           display: true,
           color: 'gray'
-          // drawOnChartArea: false,
-          // drawTicks: false,
         },
-        title: {
-          display: true,
-          text: 'Valor',
-          color: 'gray',
-          font: {
-            // family: 'Comic Sans MS',
-            // size: 20,
-            weight: 'bold',
-            lineHeight: 1.2,
-          },
-          // padding: { top: 30, left: 0, right: 0, bottom: 0 }
-        },
+        // title: {
+        //   display: true,
+        //   text: 'Valor',
+        //   color: 'gray',
+        //   font: {
+        //     // family: 'Comic Sans MS',
+        //     // size: 20,
+        //     weight: 'bold',
+        //     lineHeight: 1.2,
+        //   },
+        //   // padding: { top: 30, left: 0, right: 0, bottom: 0 }
+        // },
         ticks: {
           color: 'white',
           callback: function (value, index, ticks) {
@@ -129,22 +141,17 @@ const data = reactive({
   }
 })
 
-watch(getSpentsToChart, (newValue) => {
+// changeCategory(data.category)
+// getDataToChartLine()
+
+
+watch(props, (newValue) => {
   data.dataChart = {
-    labels: newValue.xaxis,
+    labels: newValue.dataChartLine.xaxis,
     datasets: [
       {
         label: data.category,
-        data: newValue.series.data,
-        borderColor: '#36A2EB',
-        backgroundColor: '#9BD0F5',
-        colorFont: 'white'
-      },
-      {
-        label: 'Hobby',
-        data: [100, 250, 364, 98, 800],
-        borderColor: '#36A2EB',
-        backgroundColor: '#9BD0F5',
+        data: newValue.dataChartLine.series.data,
         colorFont: 'white'
       }
     ]
@@ -156,7 +163,7 @@ watch(getSpentsToChart, (newValue) => {
 <template>
   <div class="flex flex-col gap-2 rounded">
     <Selector @change="changeCategory(data.category)" :options="getFilteredCategories" v-model="data.category"
-      :value="data.category" class="btn w-full h-12" />
-    <Line :data="data.dataChart" :options="data.options" class="bg-gray-700 rounded" />
+      :value="data.category" class="input w-full h-12" />
+    <Line :data="data.dataChart" :options="data.options" class="rounded" />
   </div>
 </template>

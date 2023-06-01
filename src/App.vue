@@ -14,7 +14,8 @@ import {
   LineElement,
   PointElement,
   DoughnutController,
-  ArcElement
+  ArcElement,
+  Colors
 } from 'chart.js'
 
 ChartJS.register(
@@ -27,24 +28,25 @@ ChartJS.register(
   LineElement,
   PointElement,
   DoughnutController,
-  ArcElement
+  ArcElement,
+  Colors
 )
 
-const spents = useSpentsStore()
-const { httpRequestSpents, changeMonth } = spents
+// const spents = useSpentsStore()
+// const { httpRequestSpents, changeMonth } = spents
 
-const categories = useCategoriesStore()
-const { httpRequestCategories } = categories
+// const categories = useCategoriesStore()
+// const { httpRequestCategories } = categories
 
-const month = new Date().getMonth()
-const year = new Date().getFullYear()
-const date = ref({ month, year });
+// const month = new Date().getMonth()
+// const year = new Date().getFullYear()
+// const date = ref({ month, year });
 
-onMounted(async () => {
-  changeMonth(date)
-  await httpRequestCategories()
-  await httpRequestSpents()
-})
+// onMounted(async () => {
+//   changeMonth(date)
+  // await httpRequestCategories()
+  // await httpRequestSpents()
+// })
 
 </script>
 <template>

@@ -19,9 +19,11 @@ watch(getSpents, () => {
     <div class="flex flex-col justify-between h-full overflow-y-auto py-4">
       <p class="text-center text-lg font-semibold">Resumo</p>
       <div class="grow py-4 flex flex-col gap-2 overflow-y-auto">
-        <Accordion v-for="totalizer in getSummary.summary" >
+        <Accordion v-for="totalizer in getSummary.summary">
           <template #accordion-tittle>
-            <div @click="expand(totalizer)" :class="totalizer.style, {'rounded-none rounded-t' : totalizer.expanded }" class="py-2 px-4 w-full h-full flex justify-between rounded bg-gray-700">
+            <div @click="expand(totalizer)"
+              :class="totalizer.style || 'bg-gray-700', { 'rounded-none rounded-t': totalizer.expanded }"
+              class="py-2 px-4 w-full h-full flex justify-between rounded transition-all">
               <span>{{ totalizer.category }}</span>
               <span>{{ convertToCurrency(totalizer.totalSpent) }}</span>
             </div>
