@@ -33,8 +33,6 @@ const props = defineProps({
   }
 })
 
-console.log(props.dataChartLine);
-
 const data = reactive({
   // category: 'Mercado',
   dataChart: {
@@ -151,22 +149,47 @@ const data = reactive({
 })
 
 const refreshChartDataSet = () => {
-  // if (!props.dataChartLine[0]) return
-  // console.log(props.dataChartLine);
-  // const { series, xaxis } = props.dataChartLine
-  // const [{ name, dataChart }] = series
-  // const newDataset = {
-  //   labels: xaxis,
-  //   datasets: [
-  //     {
-  //       label: name,
-  //       data: dataChart,
-  //       colorFont: 'white'
-  //     }
-  //   ]
-  // }
-  // data.dataChart = newDataset
+  if (!props.dataChartLine[0]) return
+  const { series, xaxis } = props.dataChartLine
+  const [{ name, dataChart }] = series
+  const newDataset = {
+    labels: xaxis,
+    datasets: [
+      {
+        label: name,
+        data: dataChart,
+        colorFont: 'white'
+      }
+    ]
+  }
+  console.log(newDataset);
+  data.dataChart = newDataset
 }
+
+watch(props, (newValue) => {
+  console.log(newValue.dataChartLine);
+  const name2 = Object.keys(newValue.dataChartLine)
+  console.log(name2);
+  const { series, xaxis } = newValue.dataChartLine
+  const [{ name, dataChart }] = series
+  const newDataset = {
+    labels: xaxis,
+    datasets: [
+      {
+        label: name,
+        data: dataChart,
+        colorFont: 'white'
+      }
+    ]
+  }
+  console.log(newDataset);
+  data.dataChart = newDataset
+  // console.log(newValue.dataChartLine);
+})
+
+
+
+
 
 onMounted(() => {
   // changeCategory(data.category)

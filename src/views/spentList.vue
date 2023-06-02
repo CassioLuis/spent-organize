@@ -110,7 +110,7 @@ watch(date, () => {
         <div>
           <Selector @change="changeCategory(data.category)" v-model="data.category" :value="data.category"
             :options="getCategoriesFromCharts" class="input w-full h-12" />
-          <ChartLine :data-chartLine="data.dataChart" :categories="getCategoriesFromCharts" />
+          <ChartLine :dataChartLine="data.dataChart" :categories="getCategoriesFromCharts" />
         </div>
       </div>
     </div>
