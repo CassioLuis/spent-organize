@@ -11,8 +11,7 @@ const categories = useCategoriesStore()
 const { getFilteredCategories } = storeToRefs(categories)
 
 const charts = useChartsStore()
-const { getAllSpents } = storeToRefs(charts)
-const { changeCategory } = charts
+const { changeCategory, setDataToChartLineByCategoryYearly } = charts
 
 
 const props = defineProps({
@@ -22,8 +21,9 @@ const props = defineProps({
   }
 })
 
+
 const data = reactive({
-  // category: 'Mercado',
+  category: 'Mercado',
   dataChart: {
     datasets: []
   },
@@ -136,7 +136,6 @@ const data = reactive({
     }
   }
 })
-console.log(data.category)
 
 const refreshChartDataSet = () => {
   const { series, xaxis } = props.dataChartLine
@@ -151,22 +150,23 @@ const refreshChartDataSet = () => {
     ]
   }
   data.dataChart = newDataset
-  // changeCategory(data.category)
+  changeCategory(data.category)
 }
 
 onMounted(() => {
   refreshChartDataSet()
 })
 
-watch(props, () => {
+watch(props, (newValue) => {
+  console.log(newValue);
   refreshChartDataSet()
 }, { deep: true })
 
 </script>
 <template>
   <div class="flex flex-col gap-2 rounded">
-    <!-- <Selector @change="changeCategory(data.category)" :options="getFilteredCategories" v-model="data.category"
-      :value="data.category" class="input w-full h-12" /> -->
+    <Selector @change="changeCategory(data.category)" :options="getFilteredCategories" v-model="data.category"
+      :value="data.category" class="input w-full h-12" />
     <Line :data="data.dataChart" :options="data.options" class="rounded" />
   </div>
 </template>

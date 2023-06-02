@@ -24,7 +24,7 @@ export const useChartsStore = defineStore('charts', {
     },
     getChartLineByCategoryYearly() {
       console.log(this.chartLine.lineByCategoryYearly);
-      return this.chartLine.lineByCategoryYearly
+      return this.chartLine.lineByCategoryYearly.mercado
     }
   },
   actions: {
@@ -45,40 +45,79 @@ export const useChartsStore = defineStore('charts', {
       }
     },
     setDataToChartLineByCategoryYearly() {
-      const spentByCategory = this.getAllSpents //.filter((item) => item.category === this.category)
+      const allCategories = [...new Set(this.getAllSpents.map(item => item.category))];
+      const allMonths = [...new Set(this.getAllSpents.map(item => item.date.substring(0, 7)))];
+      allMonths.sort()
+      // const chartData = {
+      //   xaxis: allMonths,
+      //   series: []
+      // };
 
-      const totals = spentByCategory.reduce((acc, item) => {
-        const { date, spentValue } = item
-        const yearMonth = date.substring(0, 7)
+      const chartData = allCategories.map(category => {
+        const spentByCategory = this.getAllSpents.filter(item => item.category === category);
+        const totals = spentByCategory.reduce((acc, item) => {
+          const { date, spentValue } = item;
+          const yearMonth = date.substring(0, 7);
+          if (!acc[yearMonth]) {
+            acc[yearMonth] = spentValue;
+          } else {
+            acc[yearMonth] += spentValue;
+          }
+          return acc;
+        }, {});
 
-        if (!acc[yearMonth]) {
-          acc[yearMonth] = spentValue
-        } else {
-          acc[yearMonth] += spentValue
-        }
-        return acc
-      }, {})
+        const month = Object.keys(totals).sort()
 
-      const sortedTotals = Object.fromEntries(
-        Object.entries(totals).sort((a, b) => a[0].localeCompare(b[0]))
-      )
-      const roundedTotals = Object.fromEntries(
-        Object.entries(sortedTotals).map(([key, value]) => [key, parseFloat(value.toFixed(2))])
-      )
+        const seriesData = month.map(month => {
+          if (totals[month]) return totals[month]
+          return
+        });
 
-      const category = this.category
-      return this.chartLine = {
-        ...this.chartLine,
-        lineByCategoryYearly: {
-          category: {
-            xaxis: Object.keys(roundedTotals),
-            series: {
-              name: this.category,
-              data: Object.values(roundedTotals)
-            }
+        return {
+          [category]: {
+            xaxis: month,
+            series: [{
+              name: category,
+              data: seriesData
+            }]
           }
         }
-      }
+      })
+
+      this.chartLine = {
+        ...this.chartLine,
+        lineByCategoryYearly: chartData
+      };
+
+      // console.log(this.category);
+      // const spentByCategory = this.getAllSpents //.filter((item) => item.category === this.category)
+      // console.log(spentByCategory);
+      // const totals = spentByCategory.reduce((acc, item) => {
+      //   const { date, spentValue } = item
+      //   const yearMonth = date.substring(0, 7)
+      //   if (!acc[yearMonth]) {
+      //     acc[yearMonth] = spentValue
+      //   } else {
+      //     acc[yearMonth] += spentValue
+      //   }
+      //   return acc
+      // }, {})
+      // const sortedTotals = Object.fromEntries(
+      //   Object.entries(totals).sort((a, b) => a[0].localeCompare(b[0]))
+      // )
+      // const roundedTotals = Object.fromEntries(
+      //   Object.entries(sortedTotals).map(([key, value]) => [key, parseFloat(value.toFixed(2))])
+      // )
+      // return this.chartLine = {
+      //   ...this.chartLine,
+      //   lineByCategoryYearly: {
+      //     xaxis: Object.keys(roundedTotals),
+      //     series: {
+      //       name: this.category,
+      //       data: Object.values(roundedTotals)
+      //     }
+      //   }
+      // }
     },
     changeCategory(category) {
       return this.category = category
