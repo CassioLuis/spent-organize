@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, watch, onMounted } from 'vue';
+import { reactive, watch, onMounted, computed } from 'vue';
 import Selector from '@/components/Selector.vue'
 import { storeToRefs } from 'pinia';
 import { useCategoriesStore } from '@/stores/categories.js'
@@ -11,19 +11,32 @@ const categories = useCategoriesStore()
 const { getFilteredCategories } = storeToRefs(categories)
 
 const charts = useChartsStore()
+const { getChartLineByCategoryYearly } = storeToRefs(charts)
 const { changeCategory, setDataToChartLineByCategoryYearly } = charts
 
+// console.log(charts.category, getChartLineByCategoryYearly.value);
 
 const props = defineProps({
   dataChartLine: {
     type: Object,
     required: true
+  },
+  categories: {
+    type: Array,
+    required: true
+  },
+  series: {
+    type: Array
+  },
+  xaxis: {
+    type: Array
   }
 })
 
+console.log(props.dataChartLine);
 
 const data = reactive({
-  category: 'Mercado',
+  // category: 'Mercado',
   dataChart: {
     datasets: []
   },
@@ -138,35 +151,37 @@ const data = reactive({
 })
 
 const refreshChartDataSet = () => {
-  const { series, xaxis } = props.dataChartLine
-  const newDataset = {
-    labels: xaxis,
-    datasets: [
-      {
-        label: series.name,
-        data: series.data,
-        colorFont: 'white'
-      }
-    ]
-  }
-  data.dataChart = newDataset
-  changeCategory(data.category)
+  // if (!props.dataChartLine[0]) return
+  // console.log(props.dataChartLine);
+  // const { series, xaxis } = props.dataChartLine
+  // const [{ name, dataChart }] = series
+  // const newDataset = {
+  //   labels: xaxis,
+  //   datasets: [
+  //     {
+  //       label: name,
+  //       data: dataChart,
+  //       colorFont: 'white'
+  //     }
+  //   ]
+  // }
+  // data.dataChart = newDataset
 }
 
 onMounted(() => {
+  // changeCategory(data.category)
   refreshChartDataSet()
 })
 
-watch(props, (newValue) => {
-  console.log(newValue);
+watch(props, () => {
   refreshChartDataSet()
 }, { deep: true })
 
 </script>
 <template>
   <div class="flex flex-col gap-2 rounded">
-    <Selector @change="changeCategory(data.category)" :options="getFilteredCategories" v-model="data.category"
-      :value="data.category" class="input w-full h-12" />
+    <!-- <Selector @change="changeCategory(data.category)" :options="props.categories" v-model="data.category"
+      :value="data.category" class="input w-full h-12" /> -->
     <Line :data="data.dataChart" :options="data.options" class="rounded" />
   </div>
 </template>

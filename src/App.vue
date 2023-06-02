@@ -52,7 +52,7 @@ ChartJS.register(
 <template>
   <div class="flex justify-center pt-4 bg-gray-950 h-full w-full text-gray-300 font-roboto antialiased">
     <div class="flex flex-col justify-start w-[1800px] px-4">
-      <div class="pb-2 flex gap-1 w-full">
+      <div class="pb-2 flex gap-2 w-full">
         <RouterLink to="/" class="btn">Controle de Gastos</RouterLink>
         <RouterLink to="/categories" class="btn">Categories</RouterLink>
       </div>

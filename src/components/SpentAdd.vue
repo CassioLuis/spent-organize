@@ -39,7 +39,7 @@ const addSpent = async () => {
 </script>
 <template>
   <div class="w-full font-semibold relative">
-    <div class="flex flex-col gap-2 border-t border-gray-700 pt-4" v-if="data.showForm">
+    <div class="flex flex-col gap-4 border-t border-gray-700 pt-4" v-if="data.showForm">
       <div class="flex gap-2 text-gray-300 text-sm">
         <div class="flex flex-col grow basis-1">
           <label for="date">Data:</label>
@@ -65,12 +65,12 @@ const addSpent = async () => {
           </div>
         </div>
       </div>
-      <div class="w-full flex justify-end gap-1 items-baseline">
-        <button @click="() => data.showForm = !data.showForm" class="btn">Cancelar</button>
-        <button @click="addSpent" class="btn">Salvar</button>
+      <div class="w-full flex justify-end gap-2 items-baseline">
+        <button @click="() => data.showForm = !data.showForm" class="btn grow basis-1">Cancelar</button>
+        <button @click="addSpent" class="btn grow basis-1">Salvar</button>
       </div>
     </div>
-    <button @click="() => data.showForm = !data.showForm" v-if="!data.showForm" class="text-4xl w-full btn py-7">
+    <button @click="() => data.showForm = !data.showForm" v-if="!data.showForm" class="text-4xl w-full btn py-4">
       <font-awesome-icon :icon="['fas', 'plus']" />
     </button>
   </div>

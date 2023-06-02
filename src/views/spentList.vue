@@ -1,13 +1,14 @@
 <script setup>
 import { useSpentsStore } from '@/stores/spents.js'
 import { useChartsStore } from '@/stores/Charts.js'
-import { ref, watch } from 'vue';
-import { storeToRefs } from 'pinia';
+import { ref, watch, reactive, onMounted, onBeforeMount } from 'vue';
+import { storeToRefs } from 'pinia'
 import SpentAdd from '@/components/SpentAdd.vue'
 import Spent from '@/components/Spent.vue'
-import SpentTotalizer from '@/components/SpentTotalizer.vue';
-import ChartLine from '@/components/ChartLine.vue';
-import ChartDoughnut from '@/components/ChartDoughnut.vue';
+import SpentTotalizer from '@/components/SpentTotalizer.vue'
+import ChartLine from '@/components/ChartLine.vue'
+import ChartDoughnut from '@/components/ChartDoughnut.vue'
+import Selector from '@/components/Selector.vue'
 import { convertToCurrency } from '@/utils/convertToCurrency.js'
 import { convertDateStringToUTCDate } from '@/utils/convertDateStringToUTCDate.js'
 import { objDateToStringDate } from '@/utils/objDateToStringDate.js'
@@ -15,16 +16,37 @@ import { objDateToStringDate } from '@/utils/objDateToStringDate.js'
 
 const spents = useSpentsStore()
 const { getSpents, getTotal, getSummary } = storeToRefs(spents)
-const { changeMonth, changeCategory } = spents
+const { changeMonth } = spents
 
 const charts = useChartsStore()
-const { getChartLineByCategoryYearly, getDoughnutSummaryMonthly, getSpentsByMounth } = storeToRefs(charts)
-const { setDataToDoughnutSummaryMonthly, setDataToChartLineByCategoryYearly } = charts
+const { getChartLineByCategoryYearly, getDoughnutSummaryMonthly, getSpentsByMounth, getCategoriesFromCharts } = storeToRefs(charts)
+const { setDataToDoughnutSummaryMonthly, setDataToChartLineByCategoryYearly, changeCategory } = charts
+
+const data = reactive({
+  category: 'Mercado',
+  dataChart: {}
+})
+
+onBeforeMount(() => {
+  changeCategory(data.category)
+})
+
+onMounted(() => {
+})
 
 setDataToDoughnutSummaryMonthly()
 setDataToChartLineByCategoryYearly()
 
+watch(getChartLineByCategoryYearly, () => {
+  const dataChart = getChartLineByCategoryYearly.value
+  const [content] = dataChart
+  data.dataChart = content
+  console.log(data.dataChart);
+}, { deep: true })
+
+
 watch(getSpentsByMounth, () => {
+  setDataToChartLineByCategoryYearly()
   setDataToDoughnutSummaryMonthly()
 }, { deep: true })
 
@@ -79,13 +101,17 @@ watch(date, () => {
         </div>
       </div>
     </div>
-    <div class="grow basis-1 flex flex-col justify-between p-4 border-gray-700 bg-gray-800 rounded-sm font-semibold">
+    <!-- <div class="grow basis-1 flex flex-col justify-between p-4 border-gray-700 bg-gray-800 rounded-sm font-semibold">
       <SpentTotalizer :totalizer-spents="getSummary" class="w-full" />
-    </div>
+    </div> -->
     <div class="grow basis-1 p-4 rounded-sm font-semibold">
       <div class="flex flex-col w-full gap-20 h-full">
         <ChartDoughnut :data-doughnut="getDoughnutSummaryMonthly" class="h-[30vh]" />
-        <ChartLine :data-chartLine="getChartLineByCategoryYearly" />
+        <div>
+          <Selector @change="changeCategory(data.category)" v-model="data.category" :value="data.category"
+            :options="getCategoriesFromCharts" class="input w-full h-12" />
+          <ChartLine :data-chartLine="data.dataChart" :categories="getCategoriesFromCharts" />
+        </div>
       </div>
     </div>
   </div>

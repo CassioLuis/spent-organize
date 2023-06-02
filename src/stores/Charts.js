@@ -4,7 +4,7 @@ import { useSpentsStore } from '@/stores/spents.js'
 export const useChartsStore = defineStore('charts', {
   state: () => {
     return {
-      category: 'Mercado',
+      category: '',
       chartLine: {},
       chartDoughnut: {}
     }
@@ -23,8 +23,10 @@ export const useChartsStore = defineStore('charts', {
       return this.chartDoughnut.doughnutSummaryMonthly
     },
     getChartLineByCategoryYearly() {
-      console.log(this.chartLine.lineByCategoryYearly);
-      return this.chartLine.lineByCategoryYearly.mercado
+      return this.chartLine.lineByCategoryYearly.filter(item => item[this.category])
+    },
+    getCategoriesFromCharts() {
+      return [...new Set(this.getAllSpents.map(item => item.category))]
     }
   },
   actions: {
@@ -45,40 +47,33 @@ export const useChartsStore = defineStore('charts', {
       }
     },
     setDataToChartLineByCategoryYearly() {
-      const allCategories = [...new Set(this.getAllSpents.map(item => item.category))];
-      const allMonths = [...new Set(this.getAllSpents.map(item => item.date.substring(0, 7)))];
-      allMonths.sort()
-      // const chartData = {
-      //   xaxis: allMonths,
-      //   series: []
-      // };
-
+      const allCategories = this.getCategoriesFromCharts
       const chartData = allCategories.map(category => {
-        const spentByCategory = this.getAllSpents.filter(item => item.category === category);
+        const spentByCategory = this.getAllSpents.filter(item => item.category === category)
         const totals = spentByCategory.reduce((acc, item) => {
-          const { date, spentValue } = item;
-          const yearMonth = date.substring(0, 7);
+          const { date, spentValue } = item
+          const yearMonth = date.substring(0, 7)
           if (!acc[yearMonth]) {
-            acc[yearMonth] = spentValue;
+            acc[yearMonth] = spentValue
           } else {
-            acc[yearMonth] += spentValue;
+            acc[yearMonth] += spentValue
           }
-          return acc;
-        }, {});
+          return acc
+        }, {})
 
-        const month = Object.keys(totals).sort()
+        const months = Object.keys(totals).sort()
 
-        const seriesData = month.map(month => {
+        const seriesData = months.map(month => {
           if (totals[month]) return totals[month]
           return
         });
 
         return {
           [category]: {
-            xaxis: month,
+            xaxis: months,
             series: [{
               name: category,
-              data: seriesData
+              dataChart: seriesData
             }]
           }
         }
@@ -87,7 +82,7 @@ export const useChartsStore = defineStore('charts', {
       this.chartLine = {
         ...this.chartLine,
         lineByCategoryYearly: chartData
-      };
+      }
 
       // console.log(this.category);
       // const spentByCategory = this.getAllSpents //.filter((item) => item.category === this.category)
