@@ -9,12 +9,14 @@ const props = defineProps({
   }
 })
 
+const { labels, totals } = props.dataDoughnut
+
 const data = reactive({
   dataChart: {
-    labels: props.dataDoughnut.labels,
+    labels: labels,
     datasets: [
       {
-        data: props.dataDoughnut.data
+        data: totals
       }
     ]
   },
@@ -38,11 +40,8 @@ const data = reactive({
           }
         }
       },
-      // autocolors: {
-      //   mode: 'data',
-      //   offset: 10
-      // },
       legend: {
+        display: false,
         position: 'right',
         labels: {
           color: 'white',
@@ -54,19 +53,23 @@ const data = reactive({
       title: {
         display: true,
         text: 'Resumo Mensal',
-        color: 'white'
+        color: 'white',
+        font: {
+          size: 16,
+        }
       }
     }
   }
 })
 
 watch(props, (newValue) => {
+  const { labels, totals } = newValue.dataDoughnut
+
   data.dataChart = {
-    labels: newValue.dataDoughnut.labels,
+    labels: labels,
     datasets: [
       {
-        label: data.category,
-        data: newValue.dataDoughnut.data,
+        data: totals,
         borderColor: 'white'
       }
     ]

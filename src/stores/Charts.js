@@ -4,52 +4,49 @@ import { useSpentsStore } from '@/stores/spents.js'
 export const useChartsStore = defineStore('charts', {
   state: () => {
     return {
-      category: '',
-      chartLine: [],
-      chartDoughnut: {
-        // doughnutSummaryMonthly: {}
-      }
+      category: 'Mercado',
+      chartLine: {},
+      chartDoughnut: {}
     }
   },
   getters: {
-    spentsInCharts() {
+    getSpentsByMounth() {
       const spents = useSpentsStore()
       const { getSpents } = storeToRefs(spents)
       return getSpents.value
     },
+    getAllSpents() {
+      const spents = useSpentsStore()
+      return spents.spentList
+    },
     getDoughnutSummaryMonthly() {
       return this.chartDoughnut.doughnutSummaryMonthly
+    },
+    getChartLineByCategoryYearly() {
+      console.log(this.chartLine.lineByCategoryYearly);
+      return this.chartLine.lineByCategoryYearly
     }
   },
   actions: {
-    getDataToDoughnutSummaryMonthly() {
-      const spentCategories = [...new Set(this.spentsInCharts.map(spent => spent.category))]
+    setDataToDoughnutSummaryMonthly() {
+      const spentCategories = [...new Set(this.getSpentsByMounth.map(spent => spent.category))]
 
       const totalizer = spentCategories.map(category => {
-        const spentsByCategory = this.spentsInCharts.filter(spent => spent.category === category)
+        const spentsByCategory = this.getSpentsByMounth.filter(spent => spent.category === category)
         const totalSpentByCategory = spentsByCategory.reduce((acc, spent) => acc + Number(spent.spentValue), 0)
         return totalSpentByCategory
       })
-      // console.log({
-      //   doughnutSummaryMonthly: {
-      //     labels: spentCategories,
-      //     data: totalizer
-      //   }
-      // })
       return this.chartDoughnut = {
         ...this.chartDoughnut,
         doughnutSummaryMonthly: {
           labels: spentCategories,
-          data: totalizer
+          totals: totalizer
         }
       }
     },
-    getDataToChartLine() {
-      const spents = useSpentsStore()
-      const { getSpents } = storeToRefs(spents)
+    setDataToChartLineByCategoryYearly() {
+      const spentByCategory = this.getAllSpents //.filter((item) => item.category === this.category)
 
-      const spentByCategory = getSpents.value.filter((item) => item.category === this.category)
-      console.log(spents.category);
       const totals = spentByCategory.reduce((acc, item) => {
         const { date, spentValue } = item
         const yearMonth = date.substring(0, 7)
@@ -62,36 +59,28 @@ export const useChartsStore = defineStore('charts', {
         return acc
       }, {})
 
-
       const sortedTotals = Object.fromEntries(
         Object.entries(totals).sort((a, b) => a[0].localeCompare(b[0]))
       )
-
       const roundedTotals = Object.fromEntries(
         Object.entries(sortedTotals).map(([key, value]) => [key, parseFloat(value.toFixed(2))])
       )
-      // console.log(
-      //   {
-      //     xaxis: Object.keys(roundedTotals),
-      //     series: {
-      //       name: this.category,
-      //       data: Object.values(roundedTotals)
-      //     }
-      //   }
-      // )
-      return {
-        xaxis: Object.keys(roundedTotals),
-        series: {
-          name: this.category,
-          data: Object.values(roundedTotals)
+
+      const category = this.category
+      return this.chartLine = {
+        ...this.chartLine,
+        lineByCategoryYearly: {
+          category: {
+            xaxis: Object.keys(roundedTotals),
+            series: {
+              name: this.category,
+              data: Object.values(roundedTotals)
+            }
+          }
         }
       }
     },
-    resetChart() {
-      // this.getDataToDoughnutSummaryMonthly()
-    },
     changeCategory(category) {
-      // console.log(category);
       return this.category = category
     }
   }

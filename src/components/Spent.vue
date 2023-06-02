@@ -18,6 +18,8 @@ const props = defineProps({
   }
 })
 
+console.log(props.spentList);
+
 const data = reactive({
   sortKey: '',
   sortDirection: 'asc',

@@ -18,13 +18,14 @@ const { getSpents, getTotal, getSummary } = storeToRefs(spents)
 const { changeMonth, changeCategory } = spents
 
 const charts = useChartsStore()
-const { getDataToChartLine, getDoughnutSummaryMonthly, spentsInCharts } = storeToRefs(charts)
-const { getDataToDoughnutSummaryMonthly } = charts
+const { getChartLineByCategoryYearly, getDoughnutSummaryMonthly, getSpentsByMounth } = storeToRefs(charts)
+const { setDataToDoughnutSummaryMonthly, setDataToChartLineByCategoryYearly } = charts
 
-getDataToDoughnutSummaryMonthly()
+setDataToDoughnutSummaryMonthly()
+setDataToChartLineByCategoryYearly()
 
-watch(spentsInCharts, () => {
-  getDataToDoughnutSummaryMonthly()
+watch(getSpentsByMounth, () => {
+  setDataToDoughnutSummaryMonthly()
 }, { deep: true })
 
 const month = new Date().getMonth()
@@ -78,13 +79,13 @@ watch(date, () => {
         </div>
       </div>
     </div>
-    <div class="grow basis-1 flex flex-col justify-between p-4 border-gray-700 bg-gray-800 rounded-sm font-semibold">
+    <!-- <div class="grow basis-1 flex flex-col justify-between p-4 border-gray-700 bg-gray-800 rounded-sm font-semibold">
       <SpentTotalizer :totalizer-spents="getSummary" class="w-full" />
-    </div>
+    </div> -->
     <div class="grow basis-1 p-4 rounded-sm font-semibold">
-      <div class="flex flex-col w-full gap-3 h-full">
-        <ChartDoughnut :data-doughnut="getDoughnutSummaryMonthly" class="h-[40vh]" />
-        <ChartLine :data-chartLine="getDataToChartLine" />
+      <div class="flex flex-col w-full gap-20 h-full">
+        <ChartDoughnut :data-doughnut="getDoughnutSummaryMonthly" class="h-[30vh]" />
+        <!-- <ChartLine :data-chartLine="getChartLineByCategoryYearly" /> -->
       </div>
     </div>
   </div>
