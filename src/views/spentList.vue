@@ -19,35 +19,22 @@ const { getSpents, getTotal, getSummary } = storeToRefs(spents)
 const { changeMonth } = spents
 
 const charts = useChartsStore()
+const { resetDataToDoughnutSummaryMonthly, resetDataToChartLineByCategoryYearly, changeCategory } = charts
 const { getChartLineByCategoryYearly, getDoughnutSummaryMonthly, getSpentsByMounth, getCategoriesFromCharts } = storeToRefs(charts)
-const { setDataToDoughnutSummaryMonthly, setDataToChartLineByCategoryYearly, changeCategory } = charts
 
 const data = reactive({
-  category: 'Mercado',
   dataChart: {}
 })
 
 onBeforeMount(() => {
-  changeCategory(data.category)
+  resetDataToDoughnutSummaryMonthly()
+  resetDataToChartLineByCategoryYearly()
 })
-
-onMounted(() => {
-})
-
-setDataToDoughnutSummaryMonthly()
-setDataToChartLineByCategoryYearly()
-
-watch(getChartLineByCategoryYearly, () => {
-  const dataChart = getChartLineByCategoryYearly.value
-  const [content] = dataChart
-  data.dataChart = content
-  console.log(data.dataChart);
-}, { deep: true })
-
 
 watch(getSpentsByMounth, () => {
-  setDataToChartLineByCategoryYearly()
-  setDataToDoughnutSummaryMonthly()
+  resetDataToChartLineByCategoryYearly()
+  resetDataToDoughnutSummaryMonthly()
+  console.log(getChartLineByCategoryYearly.value);
 }, { deep: true })
 
 const month = new Date().getMonth()
@@ -80,39 +67,41 @@ watch(date, () => {
 })
 </script>
 <template>
-  <div class="flex w-full h-[92vh] gap-3 mb-4">
-    <div class="grow basis-40 flex flex-col h-full gap-3">
-      <div class="flex rounded-sm border-gray-700 bg-gray-800 p-2 items-center">
-        <font-awesome-icon :icon="['fas', 'chevron-right']" @click="changePeriod('prev')"
-          class="rotate-180 cursor-pointer w-2 hover:text-gray-100 transition-all px-2 py-4 h-full rounded-r" />
-        <Datepicker v-model="date" month-picker auto-apply locale="pt-BR" dark
-          class="grow basis-1 flex justify-center h-14 border-none rounded" />
-        <font-awesome-icon :icon="['fas', 'chevron-right']" @click="changePeriod('next')"
-          class="cursor-pointer w-2 hover:text-gray-100 transition-all px-2 py-4 h-full rounded-r" />
-        <div class="flex items-center justify-center flex-grow basis-1 h-full font-semibold">{{
-          convertToCurrency(getTotal) }}</div>
-      </div>
-      <div class="flex flex-col h-full gap-2 p-4 rounded-sm border-gray-700 bg-gray-800">
-        <div class="flex flex-col grow basis-1 overflow-y-auto">
-          <Spent :spent-list="getSpents" />
+  <div class="flex w-full h-full gap-3 mb-4">
+    <div class="grow flex flex-col">
+      <div class="grow basis-1 flex flex-col h-full gap-3">
+        <div class="flex rounded-sm border-gray-700 bg-gray-800 p-2 items-center">
+          <font-awesome-icon :icon="['fas', 'chevron-right']" @click="changePeriod('prev')"
+            class="rotate-180 cursor-pointer w-2 hover:text-gray-100 transition-all px-2 py-4 h-full rounded-r" />
+          <Datepicker v-model="date" month-picker auto-apply locale="pt-BR" dark
+            class="grow basis-1 flex justify-center h-14 border-none rounded" />
+          <font-awesome-icon :icon="['fas', 'chevron-right']" @click="changePeriod('next')"
+            class="cursor-pointer w-2 hover:text-gray-100 transition-all px-2 py-4 h-full rounded-r" />
+          <div class="flex items-center justify-center flex-grow basis-1 h-full font-semibold">{{
+            convertToCurrency(getTotal) }}</div>
         </div>
-        <div>
-          <SpentAdd />
+        <div class="flex flex-col h-full gap-2 p-4 rounded-sm border-gray-700 bg-gray-800">
+          <div class="flex flex-col grow basis-1 overflow-y-auto">
+            <Spent :spent-list="getSpents" />
+          </div>
+          <!-- <div>
+            <SpentAdd />
+          </div> -->
+        </div>
+      </div>
+      <div class="grow basis-1 p-4 rounded-sm font-semibold">
+        <div class="flex w-full items-center gap-20 h-full">
+          <ChartDoughnut :data-doughnut="getDoughnutSummaryMonthly" class="h-[30vh] grow basis-1" />
+          <div class="grow basis-1">
+            <Selector @change="changeCategory(data.category)" v-model="data.category" :value="data.category"
+              :options="getCategoriesFromCharts" class="input w-full h-12" />
+            <ChartLine :dataChartLine="getChartLineByCategoryYearly" :categories="getCategoriesFromCharts" />
+          </div>
         </div>
       </div>
     </div>
-    <!-- <div class="grow basis-1 flex flex-col justify-between p-4 border-gray-700 bg-gray-800 rounded-sm font-semibold">
+    <div class="flex flex-col h-full justify-between p-4 border-gray-700 bg-gray-800 rounded-sm font-semibold">
       <SpentTotalizer :totalizer-spents="getSummary" class="w-full" />
-    </div> -->
-    <div class="grow basis-1 p-4 rounded-sm font-semibold">
-      <div class="flex flex-col w-full gap-20 h-full">
-        <ChartDoughnut :data-doughnut="getDoughnutSummaryMonthly" class="h-[30vh]" />
-        <div>
-          <Selector @change="changeCategory(data.category)" v-model="data.category" :value="data.category"
-            :options="getCategoriesFromCharts" class="input w-full h-12" />
-          <ChartLine :dataChartLine="data.dataChart" :categories="getCategoriesFromCharts" />
-        </div>
-      </div>
     </div>
   </div>
 </template>

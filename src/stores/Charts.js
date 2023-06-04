@@ -4,7 +4,7 @@ import { useSpentsStore } from '@/stores/spents.js'
 export const useChartsStore = defineStore('charts', {
   state: () => {
     return {
-      category: '',
+      category: 'Mercado',
       chartLine: {},
       chartDoughnut: {}
     }
@@ -23,14 +23,15 @@ export const useChartsStore = defineStore('charts', {
       return this.chartDoughnut.doughnutSummaryMonthly
     },
     getChartLineByCategoryYearly() {
-      return this.chartLine.lineByCategoryYearly.filter(item => item[this.category])
+      const { lineByCategoryYearly } = this.chartLine
+      return lineByCategoryYearly.filter(item => item[this.category])
     },
     getCategoriesFromCharts() {
       return [...new Set(this.getAllSpents.map(item => item.category))]
     }
   },
   actions: {
-    setDataToDoughnutSummaryMonthly() {
+    resetDataToDoughnutSummaryMonthly() {
       const spentCategories = [...new Set(this.getSpentsByMounth.map(spent => spent.category))]
 
       const totalizer = spentCategories.map(category => {
@@ -46,8 +47,9 @@ export const useChartsStore = defineStore('charts', {
         }
       }
     },
-    setDataToChartLineByCategoryYearly() {
+    resetDataToChartLineByCategoryYearly() {
       const allCategories = this.getCategoriesFromCharts
+
       const chartData = allCategories.map(category => {
         const spentByCategory = this.getAllSpents.filter(item => item.category === category)
         const totals = spentByCategory.reduce((acc, item) => {
@@ -63,10 +65,12 @@ export const useChartsStore = defineStore('charts', {
 
         const months = Object.keys(totals).sort()
 
-        const seriesData = months.map(month => {
-          if (totals[month]) return totals[month]
-          return
-        });
+        const seriesData = months.map(month => totals[month])
+
+        // const seriesData = months.map(month => {
+        //   if (totals[month]) return totals[month]
+        //   return
+        // });
 
         return {
           [category]: {
@@ -83,39 +87,12 @@ export const useChartsStore = defineStore('charts', {
         ...this.chartLine,
         lineByCategoryYearly: chartData
       }
-
-      // console.log(this.category);
-      // const spentByCategory = this.getAllSpents //.filter((item) => item.category === this.category)
-      // console.log(spentByCategory);
-      // const totals = spentByCategory.reduce((acc, item) => {
-      //   const { date, spentValue } = item
-      //   const yearMonth = date.substring(0, 7)
-      //   if (!acc[yearMonth]) {
-      //     acc[yearMonth] = spentValue
-      //   } else {
-      //     acc[yearMonth] += spentValue
-      //   }
-      //   return acc
-      // }, {})
-      // const sortedTotals = Object.fromEntries(
-      //   Object.entries(totals).sort((a, b) => a[0].localeCompare(b[0]))
-      // )
-      // const roundedTotals = Object.fromEntries(
-      //   Object.entries(sortedTotals).map(([key, value]) => [key, parseFloat(value.toFixed(2))])
-      // )
-      // return this.chartLine = {
-      //   ...this.chartLine,
-      //   lineByCategoryYearly: {
-      //     xaxis: Object.keys(roundedTotals),
-      //     series: {
-      //       name: this.category,
-      //       data: Object.values(roundedTotals)
-      //     }
-      //   }
-      // }
     },
     changeCategory(category) {
       return this.category = category
+    },
+    teste() {
+      console.log(`ola`);
     }
   }
 })

@@ -36,7 +36,7 @@ watch(getFilteredCategories, () => {
 
 </script>
 <template>
-  <div class="flex flex-col p-4 border rounded-sm border-gray-500 h-full">
+  <div class="flex flex-col p-4 rounded-sm border-gray-500 h-full">
     <div class="flex gap-4">
       <input @keyup.enter="addCategory(data.category)" v-model="data.category.name"
         placeholder="Digite uma categoria e pressione enter!" class="w-full p-2 text-black rounded">

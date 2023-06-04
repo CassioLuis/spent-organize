@@ -1,20 +1,6 @@
 <script setup>
-import { reactive, watch, onMounted, computed } from 'vue';
-import Selector from '@/components/Selector.vue'
-import { storeToRefs } from 'pinia';
-import { useCategoriesStore } from '@/stores/categories.js'
+import { reactive, watch, onMounted } from 'vue';
 import { Line } from 'vue-chartjs'
-import { useChartsStore } from '@/stores/Charts';
-
-
-const categories = useCategoriesStore()
-const { getFilteredCategories } = storeToRefs(categories)
-
-const charts = useChartsStore()
-const { getChartLineByCategoryYearly } = storeToRefs(charts)
-const { changeCategory, setDataToChartLineByCategoryYearly } = charts
-
-// console.log(charts.category, getChartLineByCategoryYearly.value);
 
 const props = defineProps({
   dataChartLine: {
@@ -24,17 +10,10 @@ const props = defineProps({
   categories: {
     type: Array,
     required: true
-  },
-  series: {
-    type: Array
-  },
-  xaxis: {
-    type: Array
   }
 })
 
 const data = reactive({
-  // category: 'Mercado',
   dataChart: {
     datasets: []
   },
@@ -148,31 +127,21 @@ const data = reactive({
   }
 })
 
-const refreshChartDataSet = () => {
-  if (!props.dataChartLine[0]) return
-  const { series, xaxis } = props.dataChartLine
-  const [{ name, dataChart }] = series
-  const newDataset = {
-    labels: xaxis,
-    datasets: [
-      {
-        label: name,
-        data: dataChart,
-        colorFont: 'white'
-      }
-    ]
+const handleProps = () => {
+  const [dataChartLine] = props.dataChartLine
+  const labelName = Object.keys(dataChartLine)
+  const { [labelName]: { series: [{ name, dataChart }], xaxis } } = dataChartLine
+  return {
+    name,
+    dataChart,
+    xaxis
   }
-  console.log(newDataset);
-  data.dataChart = newDataset
 }
 
-watch(props, (newValue) => {
-  console.log(newValue.dataChartLine);
-  const name2 = Object.keys(newValue.dataChartLine)
-  console.log(name2);
-  const { series, xaxis } = newValue.dataChartLine
-  const [{ name, dataChart }] = series
-  const newDataset = {
+const refreshChartDataSet = () => {
+  const { name, dataChart, xaxis } = handleProps()
+
+  const newDataChart = {
     labels: xaxis,
     datasets: [
       {
@@ -182,17 +151,10 @@ watch(props, (newValue) => {
       }
     ]
   }
-  console.log(newDataset);
-  data.dataChart = newDataset
-  // console.log(newValue.dataChartLine);
-})
-
-
-
-
+  data.dataChart = newDataChart
+}
 
 onMounted(() => {
-  // changeCategory(data.category)
   refreshChartDataSet()
 })
 
@@ -203,8 +165,6 @@ watch(props, () => {
 </script>
 <template>
   <div class="flex flex-col gap-2 rounded">
-    <!-- <Selector @change="changeCategory(data.category)" :options="props.categories" v-model="data.category"
-      :value="data.category" class="input w-full h-12" /> -->
     <Line :data="data.dataChart" :options="data.options" class="rounded" />
   </div>
 </template>

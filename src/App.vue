@@ -50,13 +50,16 @@ ChartJS.register(
 
 </script>
 <template>
-  <div class="flex justify-center pt-4 bg-gray-950 h-full w-full text-gray-300 font-roboto antialiased">
-    <div class="flex flex-col justify-start w-[1800px] px-4">
-      <div class="pb-2 flex gap-2 w-full">
+  <div class="flex justify-center p-4 gap-4 bg-gray-900 h-full w-full text-gray-300 font-roboto antialiased">
+    <div class="w-[300px] h-full bg-gray-800 p-10 rounded-sm">
+      <h1 class="mb-4 text-xl">Menu</h1>
+      <div class="flex flex-col pb-2 gap-2 w-full">
         <RouterLink to="/" class="btn">Controle de Gastos</RouterLink>
         <RouterLink to="/categories" class="btn">Categories</RouterLink>
       </div>
-      <div class="h-[92vh]">
+    </div>
+    <div class="flex flex-col justify-start w-full">
+      <div class="h-full">
         <RouterView />
       </div>
     </div>
