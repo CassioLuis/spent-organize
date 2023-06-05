@@ -23,7 +23,8 @@ const { resetDataToDoughnutSummaryMonthly, resetDataToChartLineByCategoryYearly,
 const { getChartLineByCategoryYearly, getDoughnutSummaryMonthly, getSpentsByMounth, getCategoriesFromCharts } = storeToRefs(charts)
 
 const data = reactive({
-  dataChart: {}
+  dataChart: {},
+  showForm: false
 })
 
 onBeforeMount(() => {
@@ -34,7 +35,6 @@ onBeforeMount(() => {
 watch(getSpentsByMounth, () => {
   resetDataToChartLineByCategoryYearly()
   resetDataToDoughnutSummaryMonthly()
-  console.log(getChartLineByCategoryYearly.value);
 }, { deep: true })
 
 const month = new Date().getMonth()
@@ -67,30 +67,30 @@ watch(date, () => {
 })
 </script>
 <template>
-  <div class="flex w-full h-full gap-3 mb-4">
-    <div class="grow flex flex-col">
-      <div class="grow basis-1 flex flex-col h-full gap-3">
-        <div class="flex rounded-sm border-gray-700 bg-gray-800 p-2 items-center">
-          <font-awesome-icon :icon="['fas', 'chevron-right']" @click="changePeriod('prev')"
-            class="rotate-180 cursor-pointer w-2 hover:text-gray-100 transition-all px-2 py-4 h-full rounded-r" />
-          <Datepicker v-model="date" month-picker auto-apply locale="pt-BR" dark
-            class="grow basis-1 flex justify-center h-14 border-none rounded" />
-          <font-awesome-icon :icon="['fas', 'chevron-right']" @click="changePeriod('next')"
-            class="cursor-pointer w-2 hover:text-gray-100 transition-all px-2 py-4 h-full rounded-r" />
-          <div class="flex items-center justify-center flex-grow basis-1 h-full font-semibold">{{
-            convertToCurrency(getTotal) }}</div>
-        </div>
-        <div class="flex flex-col h-full gap-2 p-4 rounded-sm border-gray-700 bg-gray-800">
-          <div class="flex flex-col grow basis-1 overflow-y-auto">
+  <div class="flex w-full h-full gap-3">
+    <div class="grow flex flex-col gap-3">
+      <div class="flex rounded-sm bg-gray-800 p-2 items-center relative">
+        <font-awesome-icon :icon="['fas', 'chevron-right']" @click="changePeriod('prev')"
+          class="rotate-180 cursor-pointer w-2 hover:text-gray-100 transition-all px-2 py-4 h-full rounded-r" />
+        <Datepicker v-model="date" month-picker auto-apply locale="pt-BR" dark
+          class="grow basis-1 flex justify-center h-14 border-none rounded" />
+        <font-awesome-icon :icon="['fas', 'chevron-right']" @click="changePeriod('next')"
+          class="cursor-pointer w-2 hover:text-gray-100 transition-all px-2 py-4 h-full rounded-r" />
+        <div class="flex items-center justify-center flex-grow basis-1 h-full font-semibold">{{
+          convertToCurrency(getTotal) }}</div>
+        <button @click="() => data.showForm = !data.showForm" :class="{ 'bg-gray-600 text-white': data.showForm }"
+          class="text-4xl btn p-4">
+          <font-awesome-icon :icon="['fas', 'plus']" />
+        </button>
+        <SpentAdd v-if="data.showForm" :showFormProp="data.showForm" class="absolute right-2 top-20" />
+      </div>
+      <div class="overflow-y-auto">
+        <div class="flex flex-col gap-2 p-4 rounded-sm bg-gray-800">
+          <div class="flex flex-col grow basis-1">
             <Spent :spent-list="getSpents" />
           </div>
-          <!-- <div>
-            <SpentAdd />
-          </div> -->
         </div>
-      </div>
-      <div class="grow basis-1 p-4 rounded-sm font-semibold">
-        <div class="flex w-full items-center gap-20 h-full">
+        <div class="flex w-full items-center gap-20 p-4 rounded-sm font-semibold">
           <ChartDoughnut :data-doughnut="getDoughnutSummaryMonthly" class="h-[30vh] grow basis-1" />
           <div class="grow basis-1">
             <Selector @change="changeCategory(data.category)" v-model="data.category" :value="data.category"
@@ -100,7 +100,7 @@ watch(date, () => {
         </div>
       </div>
     </div>
-    <div class="flex flex-col h-full justify-between p-4 border-gray-700 bg-gray-800 rounded-sm font-semibold">
+    <div class="basis-80 flex flex-col h-full justify-between p-4 border-gray-700 bg-gray-800 rounded-sm font-semibold">
       <SpentTotalizer :totalizer-spents="getSummary" class="w-full" />
     </div>
   </div>

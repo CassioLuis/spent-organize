@@ -117,6 +117,10 @@ body {
   --dp-transition-timing: ease-out; /*Timing on slide animations*/
 }
 
+.dp__input_focus {
+  @apply w-full;
+}
+
 .dp__input,
 .dp__main > div {
   @apply text-center font-semibold h-full w-full border-none rounded;

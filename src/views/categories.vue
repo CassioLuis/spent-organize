@@ -36,12 +36,12 @@ watch(getFilteredCategories, () => {
 
 </script>
 <template>
-  <div class="flex flex-col p-4 rounded-sm border-gray-500 h-full">
-    <div class="flex gap-4">
+  <div class="flex flex-col rounded-sm h-full w-full">
+    <div class="flex gap-4 p-4 bg-gray-800 w-full">
       <input @keyup.enter="addCategory(data.category)" v-model="data.category.name"
         placeholder="Digite uma categoria e pressione enter!" class="w-full p-2 text-black rounded">
     </div>
-    <table class="flex flex-col w-full grow">
+    <table class="flex flex-col w-full grow bg-gray-800 p-4">
       <thead class="text-xl block pt-4">
         <tr class="flex border-b border-gray-600 py-2 pb-4 px-2">
           <th class="grow basis-1 text-left">Descrição</th>

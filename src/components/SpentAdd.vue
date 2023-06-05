@@ -6,6 +6,15 @@ import { inputValidator } from '@/utils/inputValidator.js'
 import Selector from '@/components/Selector.vue'
 import { storeToRefs } from 'pinia';
 
+
+const props = defineProps({
+  showFormProp: {
+    type: Boolean
+  }
+})
+
+console.log(props.showFormProp);
+
 const spents = useSpentsStore()
 const { add } = spents
 
@@ -38,8 +47,8 @@ const addSpent = async () => {
 }
 </script>
 <template>
-  <div class="w-full font-semibold relative">
-    <div class="flex flex-col gap-4 border-t border-gray-700 pt-4" v-if="data.showForm">
+  <div class="font-semibold bg-slate-800 p-4 rounded-sm shadow-lg border border-slate-700">
+    <div class="flex flex-col gap-4">
       <div class="flex gap-2 text-gray-300 text-sm">
         <div class="flex flex-col grow basis-1">
           <label for="date">Data:</label>
@@ -60,7 +69,8 @@ const addSpent = async () => {
             </div>
             <div class="flex flex-col grow basis-1">
               <label for="spentValue">Valor:</label>
-              <input id="spentValue" type="number" v-model="newSpent.spentValue" @keyup.enter="addSpent" class="input w-full">
+              <input id="spentValue" type="number" v-model="newSpent.spentValue" @keyup.enter="addSpent"
+                class="input w-full">
             </div>
           </div>
         </div>
@@ -70,8 +80,8 @@ const addSpent = async () => {
         <button @click="addSpent" class="btn grow basis-1">Salvar</button>
       </div>
     </div>
-    <button @click="() => data.showForm = !data.showForm" v-if="!data.showForm" class="text-4xl w-full btn py-4">
+    <!-- <button @click="() => data.showForm = !data.showForm" v-if="!data.showForm" class="text-4xl w-full btn py-4">
       <font-awesome-icon :icon="['fas', 'plus']" />
-    </button>
+    </button> -->
   </div>
 </template>
