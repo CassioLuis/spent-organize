@@ -1,6 +1,8 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
+import { reactive } from 'vue'
 import SideBar from '@/components/SideBar.vue'
+import Accordion from '@/components/Accordion.vue'
 import {
   Chart as ChartJS,
   Title,
@@ -30,13 +32,34 @@ ChartJS.register(
   Colors
 )
 
+const data = reactive({
+  openMenu: false
+})
+
 </script>
 <template>
   <div class="flex justify-center bg-gray-900 h-full w-full text-gray-300 font-roboto antialiased">
     <SideBar>
       <template #options>
-        <RouterLink to="/" class="text-left">Controle de Gastos</RouterLink>
-        <RouterLink to="/categories" class="text-left">Categories</RouterLink>
+        <Accordion>
+          <template #accordion-tittle>
+            <div @click="() => data.openMenu = !data.openMenu" :class="{'btn-sidebar-active rounded-none rounded-t-sm': data.openMenu}" class="btn-sidebar">Controle</div>
+          </template>
+          <template #accordion-content>
+            <ul v-if="data.openMenu" class="bg-sky-900 rounded-b-sm">
+              <li>
+                <RouterLink to="/" class="btn-sidebar-sub-item w-full" exact-active-class="btn-sidebar-sub-item-active">Dashboard</RouterLink>
+              </li>
+              <li>
+                <RouterLink to="/" class="btn-sidebar-sub-item w-full" exact-active-class="btn-sidebar-sub-item-active">Controle de
+                  Gastos
+                </RouterLink>
+              </li>
+            </ul>
+          </template>
+        </Accordion>
+        <RouterLink to="/categories" class="text-left btn-sidebar" exact-active-class="btn-sidebar-active">Categories
+        </RouterLink>
       </template>
     </SideBar>
     <div class="flex flex-col justify-start w-full p-4">

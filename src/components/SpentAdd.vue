@@ -1,5 +1,5 @@
 <script setup>
-import { reactive } from 'vue';
+import { reactive, defineProps } from 'vue';
 import { useSpentsStore } from '@/stores/spents.js';
 import { useCategoriesStore } from '@/stores/categories.js'
 import { inputValidator } from '@/utils/inputValidator.js'

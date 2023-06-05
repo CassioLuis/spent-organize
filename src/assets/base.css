@@ -49,6 +49,50 @@ body {
   @apply bg-gray-600;
 }
 
+.btn-sidebar {
+  @apply px-4 py-2
+    hover:bg-sky-900
+    transition-all
+    rounded-sm
+    font-semibold
+    w-full
+    block
+}
+
+.btn-sidebar-sub-item {
+  @apply px-4 py-2
+    text-sm
+    hover:bg-sky-900
+    transition-all
+    rounded-sm
+    font-semibold
+    w-full
+    block
+    text-sky-500
+}
+
+.btn-sidebar-sub-item-active {
+  @apply px-4 py-2
+    text-sm
+    focus:bg-sky-900
+    transition-all
+    rounded-sm
+    font-semibold
+    w-full
+    block
+}
+
+.btn-sidebar-active {
+  @apply px-4 py-2
+  bg-sky-800
+    transition-all
+    rounded-sm
+    font-semibold
+    w-full
+    block
+}
+
+
 .btn {
   @apply px-4 py-2
     cursor-pointer
@@ -71,7 +115,7 @@ body {
 }
 
 .input {
-  @apply mb-2 px-2 py-2 h-9 bg-gray-700 text-white rounded cursor-pointer;
+  @apply mb-2 px-2 py-2 h-9 bg-gray-700 text-white rounded cursor-pointer focus:outline-none;
 }
 
 :root {
