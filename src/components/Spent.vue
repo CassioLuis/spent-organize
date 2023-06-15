@@ -84,7 +84,7 @@ const data = reactive({
       <tbody>
         <tr v-for="item in spentList" :key="item._id" class="h-14 border-b border-gray-600">
           <td class="text-center">
-            <input class="btn cursor-pointer" type="checkbox" :checked="item.creditCard"
+            <input class="cursor-pointer h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" type="checkbox" :checked="item.creditCard"
               @change="updateSpentCreditCard(item._id)">
           </td>
           <td class="text-left text-xs text-gray-400">{{ item.presentationDate }}</td>
