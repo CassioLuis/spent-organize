@@ -69,39 +69,37 @@ const data = reactive({
 
 </script>
 <template>
-  <div class="font-semibold text-sm">
-    <table class="h-full w-full rounded">
-      <thead class="text-lg">
-        <tr class="border-b border-gray-600">
-          <th v-for="(tableHeader, index) in data.tableHeaders" :key="index"
-            :class="tableHeader.classStyle + data.tableHeadersDefaultStyle" @click="sortBy(tableHeader.originalName)">
-            {{ tableHeader.presentationName }}
-            <font-awesome-icon v-if="sortKey === tableHeader.originalName" :icon="tableHeader.icon" :class="iconRotate"
-              size="xs" />
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="item in spentList" :key="item._id" class="h-14 border-b border-gray-600">
-          <td class="text-center">
-            <input class="cursor-pointer h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" type="checkbox" :checked="item.creditCard"
-              @change="updateSpentCreditCard(item._id)">
-          </td>
-          <td class="text-left text-xs text-gray-400">{{ item.presentationDate }}</td>
-          <td>{{ item.description }}</td>
-          <td class="flex justify-center items-center text-center h-full">
-            <Selector @change="updateSpentCategory(item._id, data.category)" v-model="data.category" class="w-28"
-              :options="getFilteredCategories" :value="item.category"
-              :class="{ 'btn-danger': !item.category, 'btn': item.category }" />
-          </td>
-          <td class="text-center">{{ item.presentationQuota }} </td>
-          <td class="text-right">{{ convertToCurrency(item.spentValue) }} </td>
-          <td class="text-center">
-            <font-awesome-icon class="cursor-pointer text-red-400" :icon="['fas', 'trash-can']"
-              @click="removeSpent(item._id)" />
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <table class="font-semibold text-sm h-full w-full rounded">
+    <thead class="text-lg">
+      <tr class="border-b border-gray-600">
+        <th v-for="(tableHeader, index) in data.tableHeaders" :key="index" class="p-2 top-0 sticky bg-gray-800"
+          :class="tableHeader.classStyle + data.tableHeadersDefaultStyle" @click="sortBy(tableHeader.originalName)">
+          {{ tableHeader.presentationName }}
+          <font-awesome-icon v-if="sortKey === tableHeader.originalName" :icon="tableHeader.icon" :class="iconRotate"
+            size="xs" />
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="item in spentList" :key="item._id" class="h-14 border-b border-gray-600">
+        <td class="text-center">
+          <input class="cursor-pointer h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+            type="checkbox" :checked="item.creditCard" @change="updateSpentCreditCard(item._id)">
+        </td>
+        <td class="text-left text-xs text-gray-400">{{ item.presentationDate }}</td>
+        <td>{{ item.description }}</td>
+        <td class="flex justify-center items-center text-center h-full">
+          <Selector @change="updateSpentCategory(item._id, data.category)" v-model="data.category" class="w-28"
+            :options="getFilteredCategories" :value="item.category"
+            :class="{ 'btn-danger': !item.category, 'btn': item.category }" />
+        </td>
+        <td class="text-center">{{ item.presentationQuota }} </td>
+        <td class="text-right">{{ convertToCurrency(item.spentValue) }} </td>
+        <td class="text-center">
+          <font-awesome-icon class="cursor-pointer text-red-400" :icon="['fas', 'trash-can']"
+            @click="removeSpent(item._id)" />
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </template>

@@ -42,7 +42,7 @@ watch(getFilteredCategories, () => {
         placeholder="Digite uma categoria e pressione enter!" class="w-full p-2 text-black rounded">
     </div>
     <table class="flex flex-col w-full grow bg-gray-800 p-4">
-      <thead class="text-xl block pt-4">
+      <thead class="text-xl pt-4">
         <tr class="flex border-b border-gray-600 py-2 pb-4 px-2">
           <th class="grow basis-1 text-left">Descrição</th>
           <th class="grow basis-1 text-center">Sub-Categoria</th>
@@ -55,7 +55,7 @@ watch(getFilteredCategories, () => {
           <td class="grow basis-1 flex items-center">{{ name }}</td>
           <td class="grow basis-1 flex items-center justify-center">
             <Selector @change="update(_id, name)" :value="subCategory" v-model="data.category.subCategory"
-              :options="data.subCategories" :class="{ 'btn-danger': !subCategory, 'btn': subCategory }"/>
+              :options="data.subCategories" :class="{ 'btn-danger': !subCategory, 'btn': subCategory }" />
           </td>
           <td class="grow basis-1 flex items-center justify-end">
             <font-awesome-icon class="cursor-pointer text-red-400" :icon="['fas', 'trash-can']"

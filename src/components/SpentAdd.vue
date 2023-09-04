@@ -13,8 +13,6 @@ const props = defineProps({
   }
 })
 
-console.log(props.showFormProp);
-
 const spents = useSpentsStore()
 const { add } = spents
 

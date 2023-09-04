@@ -91,14 +91,12 @@ watch(date, () => {
           <ChartDoughnut :data-doughnut="getDoughnutSummaryMonthly" class="h-[30vh] grow basis-1" />
           <div class="grow basis-1">
             <Selector @change="changeCategory(data.category)" v-model="data.category" :value="charts.category"
-            :options="getCategoriesFromCharts" class="btn w-full h-12" />
+              :options="getCategoriesFromCharts" class="btn w-full h-12" />
             <ChartLine :dataChartLine="getChartLineByCategoryYearly" :categories="getCategoriesFromCharts" />
           </div>
         </div>
-        <div class="grow basis-1 flex flex-col gap-2 p-4 rounded-sm bg-gray-800 overflow-y-auto">
-          <div class="flex flex-col grow basis-1 overflow-y-auto">
-            <Spent :spent-list="getSpents" />
-          </div>
+        <div class="grow basis-1 rounded-sm bg-gray-800 overflow-y-auto">
+          <Spent :spent-list="getSpents" />
         </div>
       </div>
     </div>
