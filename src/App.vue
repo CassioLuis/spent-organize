@@ -1,8 +1,10 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import { reactive } from 'vue'
+import { reactive, onBeforeMount } from 'vue'
 import SideBar from '@/components/SideBar.vue'
 import Accordion from '@/components/Accordion.vue'
+import { useSpentsStore } from '@/stores/spents'
+import { useCategoriesStore } from '@/stores/categories'
 import {
   Chart as ChartJS,
   Title,
@@ -35,7 +37,6 @@ ChartJS.register(
 const data = reactive({
   openMenu: false
 })
-
 </script>
 <template>
   <div class="flex justify-center bg-gray-900 h-full w-full text-gray-300 font-roboto antialiased">

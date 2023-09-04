@@ -29,13 +29,17 @@ const { httpRequestSpents, changeMonth, resetSummary } = spents
 const categories = useCategoriesStore()
 const { httpRequestCategories } = categories
 
-const month = new Date().getMonth()
-const year = new Date().getFullYear()
-const date = ref({ month, year });
+const date = {
+  month: new Date().getMonth(),
+  year: new Date().getFullYear()
+}
 
 changeMonth(date)
-await httpRequestCategories()
-await httpRequestSpents()
+async function fetchData() {
+  await httpRequestCategories()
+  await httpRequestSpents()
+}
+await fetchData()
 resetSummary()
 
 app.component('Datepicker', Datepicker);

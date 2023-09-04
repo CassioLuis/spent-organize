@@ -1,6 +1,7 @@
 <script setup>
 import { useSpentsStore } from '@/stores/spents.js'
 import { useChartsStore } from '@/stores/Charts.js'
+import { useCategoriesStore } from '@/stores/categories'
 import { ref, watch, reactive, onMounted, onBeforeMount } from 'vue';
 import { storeToRefs } from 'pinia'
 import SpentAdd from '@/components/SpentAdd.vue'
@@ -16,7 +17,7 @@ import { objDateToStringDate } from '@/utils/objDateToStringDate.js'
 
 const spents = useSpentsStore()
 const { getSpents, getTotal, getSummary } = storeToRefs(spents)
-const { changeMonth } = spents
+const { changeMonth, httpRequestSpents, resetSummary } = spents
 
 const charts = useChartsStore()
 const { resetDataToDoughnutSummaryMonthly, resetDataToChartLineByCategoryYearly, changeCategory } = charts
@@ -27,7 +28,11 @@ const data = reactive({
   showForm: false
 })
 
-onBeforeMount(() => {
+const month = new Date().getMonth()
+const year = new Date().getFullYear()
+const date = ref({ month, year })
+
+onBeforeMount(async () => {
   resetDataToDoughnutSummaryMonthly()
   resetDataToChartLineByCategoryYearly()
 })
@@ -37,9 +42,6 @@ watch(getSpentsByMounth, () => {
   resetDataToDoughnutSummaryMonthly()
 }, { deep: true })
 
-const month = new Date().getMonth()
-const year = new Date().getFullYear()
-const date = ref({ month, year });
 
 const incrementsOrDecrementsPeriod = (date, param) => {
   const stringDate = objDateToStringDate(date)
@@ -84,18 +86,18 @@ watch(date, () => {
         </button>
         <SpentAdd v-if="data.showForm" :showFormProp="data.showForm" class="absolute right-2 top-20" />
       </div>
-      <div class="overflow-y-auto">
-        <div class="flex flex-col gap-2 p-4 rounded-sm bg-gray-800">
-          <div class="flex flex-col grow basis-1">
-            <Spent :spent-list="getSpents" />
-          </div>
-        </div>
-        <div class="flex w-full items-center gap-20 py-4 rounded-sm font-semibold">
+      <div class="grow flex flex-col">
+        <div class="grow basis-1 flex w-full items-center gap-20 py-4 rounded-sm font-semibold">
           <ChartDoughnut :data-doughnut="getDoughnutSummaryMonthly" class="h-[30vh] grow basis-1" />
           <div class="grow basis-1">
             <Selector @change="changeCategory(data.category)" v-model="data.category" :value="charts.category"
-              :options="getCategoriesFromCharts" class="input w-full h-12" />
+            :options="getCategoriesFromCharts" class="btn w-full h-12" />
             <ChartLine :dataChartLine="getChartLineByCategoryYearly" :categories="getCategoriesFromCharts" />
+          </div>
+        </div>
+        <div class="grow basis-1 flex flex-col gap-2 p-4 rounded-sm bg-gray-800 overflow-y-auto">
+          <div class="flex flex-col grow basis-1 overflow-y-auto">
+            <Spent :spent-list="getSpents" />
           </div>
         </div>
       </div>

@@ -2,8 +2,8 @@ import axios from 'axios'
 // import dotenv from 'dotenv'
 // dotenv.config()
 
-const baseURL = 'http://localhost:8080'
-// const baseURL = 'https://spent-api-3yrl.onrender.com'
+// const baseURL = 'http://localhost:8080'
+const baseURL = 'https://spent-api-3yrl.onrender.com'
 
 // 'https://spent-api-3yrl.onrender.com'
 // process.env.SPENT_API
