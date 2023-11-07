@@ -16,12 +16,32 @@ import { objDateToStringDate } from '@/utils/objDateToStringDate.js'
 
 
 const spents = useSpentsStore()
+const categories = useCategoriesStore()
+
 const { getSpents, getTotal, getSummary } = storeToRefs(spents)
 const { changeMonth, httpRequestSpents, resetSummary } = spents
+const { httpRequestCategories } = categories
 
 const charts = useChartsStore()
-const { resetDataToDoughnutSummaryMonthly, resetDataToChartLineByCategoryYearly, changeCategory } = charts
-const { getChartLineByCategoryYearly, getDoughnutSummaryMonthly, getSpentsByMounth, getCategoriesFromCharts } = storeToRefs(charts)
+const {
+  resetDataToDoughnutSummaryMonthly,
+  resetDataToChartLineByCategoryYearly,
+  changeCategory
+} = charts
+
+onBeforeMount(async () => {
+  await httpRequestSpents()
+  await httpRequestCategories()
+  resetDataToDoughnutSummaryMonthly()
+  resetDataToChartLineByCategoryYearly()
+})
+
+const {
+  getChartLineByCategoryYearly,
+  getDoughnutSummaryMonthly,
+  getSpentsByMounth,
+  getCategoriesFromCharts
+} = storeToRefs(charts)
 
 const data = reactive({
   dataChart: {},
@@ -32,10 +52,8 @@ const month = new Date().getMonth()
 const year = new Date().getFullYear()
 const date = ref({ month, year })
 
-onBeforeMount(async () => {
-  resetDataToDoughnutSummaryMonthly()
-  resetDataToChartLineByCategoryYearly()
-})
+changeMonth(date)
+resetSummary()
 
 watch(getSpentsByMounth, () => {
   resetDataToChartLineByCategoryYearly()

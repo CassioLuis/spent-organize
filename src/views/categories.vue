@@ -4,6 +4,7 @@ import { storeToRefs } from 'pinia'
 import { useCategoriesStore } from '@/stores/categories.js'
 import Selector from '@/components/Selector.vue'
 import { useSpentsStore } from '@/stores/spents.js'
+import { onMounted } from 'vue'
 
 const spent = useSpentsStore()
 const { resetSummary } = spent

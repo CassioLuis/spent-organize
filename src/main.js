@@ -1,6 +1,6 @@
 import './assets/base.css'
 
-import { createApp, ref } from 'vue'
+import { createApp, ref, onMounted } from 'vue'
 import App from './App.vue'
 
 import router from './router'
@@ -24,23 +24,23 @@ app.use(pinia)
 app.use(router)
 app.use(createPinia)
 
-const spents = useSpentsStore()
-const { httpRequestSpents, changeMonth, resetSummary } = spents
-const categories = useCategoriesStore()
-const { httpRequestCategories } = categories
+// const spents = useSpentsStore()
+// const categories = useCategoriesStore()
+// const { httpRequestSpents, changeMonth, resetSummary } = spents
+// const { httpRequestCategories } = categories
 
-const date = {
-  month: new Date().getMonth(),
-  year: new Date().getFullYear()
-}
+// const date = {
+//   month: new Date().getMonth(),
+//   year: new Date().getFullYear()
+// }
 
-changeMonth(date)
-async function fetchData() {
-  await httpRequestCategories()
-  await httpRequestSpents()
-}
-await fetchData()
-resetSummary()
+// changeMonth(date)
+// async function fetchData() {
+//   await httpRequestCategories()
+//   await httpRequestSpents()
+// }
+// await fetchData()
+// resetSummary()
 
 app.component('Datepicker', Datepicker);
 app.component('font-awesome-icon', FontAwesomeIcon)
