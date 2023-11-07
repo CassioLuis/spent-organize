@@ -187,7 +187,7 @@ body {
   --dp-primary-color: #005cb2;
   --dp-primary-text-color: #ffffff;
   --dp-secondary-color: #a9a9a9;
-  //--dp-border-color: red !important;
+  /*--dp-border-color: red !important;*/
   --dp-menu-border-color: #2d2d2d;
   --dp-border-color-hover: #aaaeb7;
   --dp-disabled-color: #737373;
